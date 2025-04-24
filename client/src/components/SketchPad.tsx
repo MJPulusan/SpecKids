@@ -1,9 +1,27 @@
 // SketchPad
 import { useRef } from 'react';
 import CanvasDraw from 'react-canvas-draw';
+import { useNavigate } from 'react-router-dom';
 
 export default function DrawingPad() {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<typeof CanvasDraw | null>(null);
+  const navigate = useNavigate();
+
+  const handleUndo = () => {
+    if (canvasRef.current) {
+      canvasRef.current.undo();
+    }
+  };
+
+  const handleErase = () => {
+    if (canvasRef.current) {
+      canvasRef.current.clear();
+    }
+  };
+
+  const handleClose = () => {
+    navigate('/');
+  };
 
   return (
     <div className="flex justify-center p-4">
@@ -17,8 +35,10 @@ export default function DrawingPad() {
         hideGrid
         style={{ border: '5px solid #ccc', borderRadius: '50px' }}
       />
-      <button>SAVE</button>
-      <button>ERASE</button>
+      <button>Save</button>
+      <button onClick={handleUndo}>Undo ↺</button>
+      <button onClick={handleErase}>Erase</button>
+      <button onClick={handleClose}>Close</button>
     </div>
   );
 }

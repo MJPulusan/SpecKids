@@ -1,10 +1,10 @@
 import DrawingPad from '../components/SketchPad';
-import './App.css';
+import '../App.css';
 
-export default function App() {
+export default function SketchPage() {
   return (
-    <div className="min-h-screen bg-blue-200 flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold mb-4">SpecKids Drawing Pad</h1>
+    <div>
+      <h1 className="text-xl font-bold text-brown-700 mb-4">Sketch Pad</h1>
       <DrawingPad />
     </div>
   );
