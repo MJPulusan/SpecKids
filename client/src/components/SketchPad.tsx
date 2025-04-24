@@ -1,5 +1,5 @@
 // SketchPad
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import CanvasDraw from 'react-canvas-draw';
 
 export default function DrawingPad() {
