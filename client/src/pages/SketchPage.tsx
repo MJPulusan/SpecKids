@@ -1,5 +1,4 @@
-// import { SketchPad } from '.'
-import DrawingPad from './components/SketchPad';
+import DrawingPad from '../components/SketchPad';
 import './App.css';
 
 export default function App() {
