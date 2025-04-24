@@ -12,11 +12,13 @@ export default function DrawingPad() {
         brushColor="#000"
         brushRadius={4}
         lazyRadius={1}
-        canvasWidth={500}
+        canvasWidth={600}
         canvasHeight={400}
         hideGrid
-        style={{ border: '5px solid #ccc', borderRadius: '12px' }}
+        style={{ border: '5px solid #ccc', borderRadius: '50px' }}
       />
+      <button>SAVE</button>
+      <button>ERASE</button>
     </div>
   );
 }
