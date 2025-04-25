@@ -10,7 +10,7 @@ create schema "public";
 CREATE TABLE "public"."Users" (
   "userId"          SERIAL PRIMARY KEY,
   "fullName"        text NOT NULL,
-  "userName"        text NOT NULL,
+  "username"        text NOT NULL,
   "hashedPassword"  text NOT NULL,
   "createdAt"       timestamptz NOT NULL DEFAULT (now())
 );

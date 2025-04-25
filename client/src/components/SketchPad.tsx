@@ -20,8 +20,7 @@ export default function Sketch() {
   }
 
   function handleClose() {
-    console.log('List Page');
-    navigate('/');
+    navigate('/'); // AppList Page
   }
 
   return (
@@ -32,6 +31,7 @@ export default function Sketch() {
         brushRadius={4}
         lazyRadius={1}
         canvasWidth={700}
+        // canvasWidth="90%"
         canvasHeight={400}
         hideGrid
         className="canvas-style"

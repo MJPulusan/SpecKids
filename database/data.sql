@@ -1,7 +1,7 @@
 -- Use SQL insert statements to add any
 -- starting/dummy data to your database tables
 
-insert into "Users" ("fullName", "userName", "hashedPassword", "createdAt")
+insert into "Users" ("fullName", "username", "hashedPassword", "createdAt")
 values
   ('Mike', 'mikep', 'password123', now()),
   ('Matt', 'mattp', 'qwerty123', now()),
