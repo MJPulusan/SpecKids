@@ -3,25 +3,26 @@ import { useRef } from 'react';
 import CanvasDraw from 'react-canvas-draw';
 import { useNavigate } from 'react-router-dom';
 
-export default function DrawingPad() {
-  const canvasRef = useRef<typeof CanvasDraw | null>(null);
+export default function Sketch() {
+  const canvasRef = useRef<typeof CanvasDraw | undefined>();
   const navigate = useNavigate();
 
-  const handleUndo = () => {
+  function handleUndo() {
     if (canvasRef.current) {
       canvasRef.current.undo();
     }
-  };
+  }
 
-  const handleErase = () => {
+  function handleErase() {
     if (canvasRef.current) {
       canvasRef.current.clear();
     }
-  };
+  }
 
-  const handleClose = () => {
+  function handleClose() {
+    console.log('List Page');
     navigate('/');
-  };
+  }
 
   return (
     <div className="flex justify-center p-4">
@@ -30,10 +31,10 @@ export default function DrawingPad() {
         brushColor="#000"
         brushRadius={4}
         lazyRadius={1}
-        canvasWidth={600}
+        canvasWidth={700}
         canvasHeight={400}
         hideGrid
-        style={{ border: '5px solid #ccc', borderRadius: '50px' }}
+        className="canvas-style"
       />
       <button>Save</button>
       <button onClick={handleUndo}>Undo ↺</button>
