@@ -1,7 +1,7 @@
-// SketchPad
 import { useRef } from 'react';
-import CanvasDraw from 'react-canvas-draw';
 import { useNavigate } from 'react-router-dom';
+import { AudioPlayer } from '../components/AudioPlayer';
+import CanvasDraw from 'react-canvas-draw';
 
 export default function Sketch() {
   const canvasRef = useRef<typeof CanvasDraw | undefined>();
@@ -20,7 +20,7 @@ export default function Sketch() {
   }
 
   function handleClose() {
-    navigate('/'); // AppList Page
+    navigate('/kids-main'); // KIDS MAIN Page
   }
 
   return (
@@ -40,6 +40,7 @@ export default function Sketch() {
       <button onClick={handleUndo}>Undo ↺</button>
       <button onClick={handleErase}>Erase</button>
       <button onClick={handleClose}>Close</button>
+      <AudioPlayer src="/sounds/CalmMusic01.mp3" />
     </div>
   );
 }

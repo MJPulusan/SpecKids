@@ -1,14 +1,20 @@
 import { Routes, Route } from 'react-router-dom';
-import ParentRegForm from './pages/ParentRegistration';
+import { ParentRegForm } from './pages/ParentRegistration';
+import { ParentsMain } from './pages/ParentsMainPage';
+import { KidsRegForm } from './pages/KidsRegistration';
+import { KidsMain } from './pages/KidsMainPage.tsx';
 import SketchPage from './pages/SketchPage';
-import ListPage from './pages/AppList';
+import HomePage from './pages/HomeLogin';
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<ListPage />} />
+      <Route path="/" element={<HomePage />} />
       <Route path="/sketchpad" element={<SketchPage />} />
-      <Route path="/register" element={<ParentRegForm />} />
+      <Route path="/parent-register" element={<ParentRegForm />} />
+      <Route path="/parents-main" element={<ParentsMain />} />
+      <Route path="/kids-register" element={<KidsRegForm />} />
+      <Route path="/kids-main" element={<KidsMain />} />
     </Routes>
   );
 }
