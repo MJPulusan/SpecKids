@@ -4,6 +4,7 @@ export default function HomePage() {
   return (
     <>
       <div>
+        <h1>HOME PAGE</h1>
         <Link to="/parent-register">Parent Registration Page</Link>
       </div>
     </>
