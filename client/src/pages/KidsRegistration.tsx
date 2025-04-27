@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// Import your backend helper (if you have a kids-specific endpoint)
-import { addUserEntry } from '../lib/data'; // Adjust if you have a kids-specific function
+// to import my backend helper (kids-specific endpoint)
+import { addUserEntry } from '../lib/data'; // will adjust for my kids-specific function
+import { AudioPlayer } from '../components/AudioPlayer';
 
 export function KidsRegForm() {
   const navigate = useNavigate();
@@ -29,7 +30,6 @@ export function KidsRegForm() {
     setError(undefined);
 
     try {
-      // Password validation (optional: adjust as needed)
       if (password.length < 6) {
         setError('Password must be at least 6 characters long.');
         setIsSubmitting(false);
@@ -46,8 +46,8 @@ export function KidsRegForm() {
   };
 
   return (
-    <div className="kidsRegPage">
-      <div className="kidsFormContainer">
+    <div className="kids-reg-page">
+      <div className="kids-form-container">
         <h1>Kids Registration</h1>
         <form onSubmit={handleSubmit} className="kidsRegForm">
           {fields.map((field) => (
@@ -62,7 +62,7 @@ export function KidsRegForm() {
               />
             </div>
           ))}
-          <div className="buttonGrp">
+          <div className="button-group">
             <button type="submit" disabled={isSubmitting}>
               {isSubmitting ? 'Registering...' : 'Register'}
             </button>
@@ -72,6 +72,7 @@ export function KidsRegForm() {
           </div>
           {error && <p className="error-message">{error}</p>}
         </form>
+        <AudioPlayer src="/sounds/kidsRegistrationVoice.mp3" />
       </div>
     </div>
   );

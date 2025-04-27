@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addUserEntry } from '../lib/data';
+import { AudioPlayer } from '../components/AudioPlayer';
 
 export function ParentRegForm() {
   const navigate = useNavigate();
@@ -49,8 +50,8 @@ export function ParentRegForm() {
   };
 
   return (
-    <div className="parentRegPage">
-      <div className="parentFormContainer">
+    <div className="parent-reg-page">
+      <div className="parent-form-container">
         <h1>Register</h1>
         <form onSubmit={handleSubmit} className="parentRegForm">
           {fields.map((field) => (
@@ -65,7 +66,7 @@ export function ParentRegForm() {
               />
             </div>
           ))}
-          <div className="buttonGrp">
+          <div className="button-group">
             <button type="submit" disabled={isSubmitting}>
               {isSubmitting ? 'Registering...' : 'Register'}
             </button>
@@ -75,6 +76,7 @@ export function ParentRegForm() {
           </div>
           {error && <p className="error-message">{error}</p>}
         </form>
+        <AudioPlayer src="/sounds/fullParentRegistrationVoice.mp3" />
       </div>
     </div>
   );
