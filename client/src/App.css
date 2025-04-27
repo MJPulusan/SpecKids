@@ -1,19 +1,17 @@
 body {
   background: #fdf4e2;
-  background-image: url('/images/logo.png');
-  background-size: 150px;
-  background-repeat: no-repeat;
-  background-position: top-left;
-  place-items: center;
+  justify-content: center;
   min-height: 100vh;
-  display: flex;
-  padding: 1rem;
-  box-sizing: border-box;
+  background-image: url('/images/logo.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 50%;
 }
 
+/* FOR MOBILE VIEW */
 @media (width <= 480px) {
   body {
-    background-size: 15vw;
+    background-size: 50vw;
     background-position: top center;
   }
 }
@@ -24,19 +22,73 @@ body {
   text-align: center;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: 300;
-  position: absolute;
+  position: flex;
   align-items: stretch;
+  color: #66440c;
 }
 
 .no-touch-scroll canvas {
   touch-action: none;
 }
 
+.parentFormContainer,
+.kidsFormContainer {
+  background: rgba(188, 186, 186, 0.7);
+  text-align: center;
+  display: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+  border-radius: 40px;
+  position: absolute;
+  top: 12%;
+  left: 15%;
+  box-shadow: 2px 2px 4px rgba(103, 103, 110, 0.5);
+}
+
+h2 {
+  text-align: left;
+  margin-bottom: 20px;
+  z-index: 1;
+  position: relative;
+}
+
+label {
+  display: block;
+  font-size: x-large;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  z-index: 1;
+  position: relative;
+}
+
+input[type='text'],
+input[type='password'] {
+  width: 60%;
+  padding: 2%;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-color: #c8c4bd;
+  border-radius: 15px;
+  box-shadow: 2px 2px 4px rgba(113, 108, 108, 0.5);
+  z-index: 1;
+  position: relative;
+}
+
+.buttonGrp {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-  margin: 0.5rem;
   font-size: 24px;
   font-weight: 500;
   font-family: inherit;
@@ -45,6 +97,8 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
   transition: 0.5s;
+  margin-top: 1.5rem;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 button:hover {

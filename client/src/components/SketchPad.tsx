@@ -25,6 +25,13 @@ export default function Sketch() {
 
   return (
     <div className="flex justify-center p-4">
+      <nav className="navbar">
+        <div className="logoContainer">
+          {/* Optional additional elements */}
+        </div>
+        <div className="navLinks">{/* Your nav links/buttons */}</div>
+      </nav>
+
       <CanvasDraw
         ref={canvasRef}
         brushColor="#000"
