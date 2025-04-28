@@ -13,9 +13,19 @@ body {
 /* FOR MOBILE VIEW */
 @media (width <= 480px) {
   body {
-    background-size: 50vw;
+    background-size: 40vw;
     background-position: top center;
   }
+}
+
+img {
+  max-width: 70vh;
+  background-position: top center;
+}
+
+.homepage-background {
+  background-color: #fdf3e2;
+  min-height: 100vh;
 }
 
 #root {
@@ -34,7 +44,9 @@ body {
 }
 
 .parent-form-container,
-.kids-form-container {
+.kids-form-container,
+.sketchContainer,
+.login-container {
   background: rgba(188, 186, 186, 0.7);
   text-align: center;
   display: absolute;
@@ -45,9 +57,15 @@ body {
   padding-bottom: 3rem;
   border-radius: 40px;
   position: absolute;
-  top: 12%;
+  top: 15%;
   left: 15%;
   box-shadow: 2px 2px 4px rgba(103, 103, 110, 0.5);
+}
+
+.login-container {
+  top: 60%;
+  left: 25%;
+  width: 50%;
 }
 
 h2 {
@@ -84,7 +102,7 @@ input[type='password'] {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 button {
@@ -113,13 +131,15 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-.canvas-style {
-  border: 5px solid #ccc;
-  border-radius: 50px;
+.sketchContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.react-canvas-draw {
-  touch-action: none;
+.canvas-style {
+  border: 2px solid #ccc;
+  border-radius: 10px;
 }
 
 .exitButton {

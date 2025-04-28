@@ -37,7 +37,7 @@ export function KidsRegForm() {
       }
 
       await addUserEntry({ fullName, username, hashedPassword: password });
-      navigate('/parents-main'); // Go PARENTS MAIN PAGE
+      navigate('/parents-main'); // Go to PARENTS MAIN PAGE
     } catch {
       setError('Kid registration failed. Please try again.');
     } finally {
@@ -50,9 +50,13 @@ export function KidsRegForm() {
       <div className="kids-form-container">
         <h1>Kids Registration</h1>
         <form onSubmit={handleSubmit} className="kidsRegForm">
+          {/* Loop through each field defined in the 'fields' array above. */}
           {fields.map((field) => (
             <div key={field.name} className="form-field">
+              {/* Render the label for each input field */}
               <label>{field.label}</label>
+
+              {/* Render the input field with dynamic properties */}
               <input
                 type={field.type}
                 name={field.name}

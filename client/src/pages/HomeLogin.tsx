@@ -1,11 +1,26 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function HomePage() {
+  const navigate = useNavigate();
+
   return (
     <>
-      <div>
-        <h1>HOME PAGE</h1>
-        <Link to="/parent-register">Parent Registration Page</Link>
+      <div className="homepage-background">
+        <img src="/images/logo.png" alt="SpecKids Logo" className="logo" />
+        <div className="login-container">
+          <div className="button-group">
+            <button
+              className="login-button"
+              onClick={() => navigate('/parent-register')}>
+              Sign Up
+            </button>
+            <button
+              className="login-button"
+              onClick={() => navigate('/login-form')}>
+              Sign In
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
