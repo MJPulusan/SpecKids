@@ -37,25 +37,16 @@ app.get('/api/Users', async (req, res, next) => {
   }
 });
 
-// Display User list
-app.get('/api/Users/:userId', async (req, res, next) => {
+// Displays kids list
+app.get('/api/Users/kids', async (req, res, next) => {
   try {
-    const userId = Number(req.params.userId);
-
-    if (!Number.isInteger(userId) || userId < 1) {
-      throw new ClientError(400, 'userId must be a positive integer');
-    }
-
     const sql = `
-        SELECT *
-        FROM "Users"
-        WHERE "userId" = $1
+      SELECT "userId", "fullName"
+      FROM "Users"
+      WHERE "role" = 'kid';
     `;
-
-    const result = await db.query(sql, [userId]);
-    const user = result.rows[0];
-
-    res.json(result.rows);
+    const result = await db.query(sql);
+    res.json(result.rows); // Returns an array of kids
   } catch (err) {
     next(err);
   }
@@ -64,19 +55,19 @@ app.get('/api/Users/:userId', async (req, res, next) => {
 // Create User
 app.post('/api/Users', async (req, res, next) => {
   try {
-    const { fullName, username, hashedPassword } = req.body;
+    const { fullName, username, hashedPassword, role } = req.body;
 
-    if (!fullName || !username || !hashedPassword) {
+    if (!fullName || !username || !hashedPassword || !role) {
       throw new ClientError(400, 'All fields required');
     }
 
     const sql = `
-    INSERT INTO "Users"("fullName", "username", "hashedPassword")
-    VALUES ($1, $2, $3)
+    INSERT INTO "Users"("fullName", "username", "hashedPassword", "role")
+    VALUES ($1, $2, $3, $4)
     RETURNING *;
     `;
 
-    const params = [fullName, username, hashedPassword];
+    const params = [fullName, username, hashedPassword, role];
     const result = await db.query(sql, params);
 
     res.status(201).json(result.rows[0]);
@@ -143,6 +134,21 @@ app.delete(`/api/Users/:userId`, async (req, res, next) => {
     }
 
     res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Fetching all kids
+app.get('/api/Users/kids', async (req, res, next) => {
+  try {
+    const sql = `
+      SELECT "userId", "fullName"
+      FROM "Users"
+      WHERE "role" = 'kid';
+    `;
+    const result = await db.query(sql);
+    res.json(result.rows);
   } catch (err) {
     next(err);
   }

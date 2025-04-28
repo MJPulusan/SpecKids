@@ -12,6 +12,7 @@ CREATE TABLE "public"."Users" (
   "fullName"        text NOT NULL,
   "username"        text NOT NULL,
   "hashedPassword"  text NOT NULL,
+  "role"            VARCHAR(10) NOT NULL DEFAULT 'kid',
   "createdAt"       timestamptz NOT NULL DEFAULT (now())
 );
 

@@ -7,6 +7,7 @@ export default function HomePage() {
     <>
       <div className="homepage-background">
         <img src="/images/logo.png" alt="SpecKids Logo" className="logo" />
+        <h1 className="frontLogo">Kids in Spectrum</h1>
         <div className="login-container">
           <div className="button-group">
             <button

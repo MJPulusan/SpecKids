@@ -36,7 +36,13 @@ export function KidsRegForm() {
         return;
       }
 
-      await addUserEntry({ fullName, username, hashedPassword: password });
+      await addUserEntry({
+        fullName,
+        username,
+        hashedPassword: password,
+        role: 'kid',
+      });
+
       navigate('/parents-main'); // Go to PARENTS MAIN PAGE
     } catch {
       setError('Kid registration failed. Please try again.');

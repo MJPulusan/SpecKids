@@ -2,6 +2,7 @@ export type UserEntry = {
   userId?: number;
   fullName: string;
   username: string;
+  role: 'parent' | 'kid';
   hashedPassword: string;
 };
 
@@ -33,6 +34,12 @@ export async function readUserEntry(
 ): Promise<UserEntry | undefined> {
   const res = await fetch(`/api/Users/${userId}`);
   if (!res.ok) throw new Error(`Failed to load User Entry`);
+  return res.json();
+}
+
+export async function readKidEntries(): Promise<UserEntry[]> {
+  const res = await fetch(`/api/Users/kids`);
+  if (!res.ok) throw new Error(`Failed to load Kids`);
   return res.json();
 }
 

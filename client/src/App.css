@@ -75,6 +75,18 @@ h2 {
   position: relative;
 }
 
+.frontLogo {
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  color: #66420b;
+  line-height: 0;
+  position: absolute;
+  bottom: 10px;
+  left: 42.5%;
+  top: 52%;
+}
+
 label {
   display: block;
   font-size: x-large;

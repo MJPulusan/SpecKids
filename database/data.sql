@@ -1,11 +1,11 @@
 -- Use SQL insert statements to add any
 -- starting/dummy data to your database tables
 
-insert into "Users" ("fullName", "username", "hashedPassword", "createdAt")
+insert into "Users" ("fullName", "username", "hashedPassword", "role", "createdAt")
 values
-  ('Mike', 'mikep', 'password123', now()),
-  ('Matt', 'mattp', 'qwerty123', now()),
-  ('Jayz', 'jayz', 'zxcvb123', now());
+  ('Mike', 'mikep', 'password123', 'parent', now()),
+  ('Matt', 'mattp', 'qwerty123', 'kid', now()),
+  ('Jayz', 'jayz', 'zxcvb123', 'parent', now());
 
 
 insert into "Schedules" ("userId", "therapyName", "timeOfDay", "daysOfWeek", "createdAt")

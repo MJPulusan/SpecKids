@@ -1,13 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { readUser } from '../lib/auth';
+import { readKidEntries } from '../lib/data';
 
 export function ParentsMain() {
   const navigate = useNavigate();
-  const parentName = ` `; // Replace with real data from context or props
-  const [selectedChild, setSelectedChild] = useState('');
+  const parentName = readUser()?.fullName || 'Parent';
+  const [selectedChild, setSelectedChild] = useState<number | ''>('');
+  const [children, setChildren] = useState<
+    { userId: number; fullName: string }[]
+  >([]);
 
-  const children = ['MattP']; // default entry only in (data.sql)
-
+  useEffect(() => {
+    async function fetchChildren() {
+      try {
+        const kids = await readKidEntries();
+        const validKids = kids
+          .filter((kid) => kid.userId !== undefined)
+          .map((kid) => ({
+            userId: kid.userId as number,
+            fullName: kid.fullName,
+          }));
+        setChildren(validKids);
+      } catch (err) {
+        console.error(err);
+        setChildren([]);
+      }
+    }
+    fetchChildren();
+  }, []);
   return (
     <div className="parentsMainPage">
       <div className="header">
@@ -23,9 +44,9 @@ export function ParentsMain() {
           onChange={(e) => {
             const value = e.target.value;
             if (value === 'add') {
-              navigate('/kids-register'); // Navigate to KidsRegistration
+              navigate('/kids-register');
             } else {
-              setSelectedChild(value);
+              setSelectedChild(Number(value));
             }
           }}
           className="childSelect">
@@ -33,12 +54,11 @@ export function ParentsMain() {
             Select Child
           </option>
           {children.map((child) => (
-            <option key={child} value={child}>
-              {child}
+            <option key={child.userId} value={child.userId}>
+              {child.fullName}
             </option>
           ))}
-          <option value="add">+ Add New Child</option>{' '}
-          {/* This adds the option */}
+          <option value="add">+ Add New Child</option>
         </select>
 
         <button

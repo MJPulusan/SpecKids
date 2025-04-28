@@ -40,7 +40,12 @@ export function ParentRegForm() {
         return;
       }
 
-      await addUserEntry({ fullName, username, hashedPassword: password });
+      await addUserEntry({
+        fullName,
+        username,
+        hashedPassword: password,
+        role: 'parent',
+      });
       navigate('/kids-register'); // KIDS register page.
     } catch {
       setError('Registration failed. Please try again.');
