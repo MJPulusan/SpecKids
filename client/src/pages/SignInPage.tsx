@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { readUserEntries } from '../lib/data';
 import { saveAuth } from '../lib/auth';
+import { AudioPlayer } from '../components/AudioPlayer';
 
 export function SignInForm() {
   const navigate = useNavigate();
@@ -85,6 +86,7 @@ export function SignInForm() {
 
           {error && <p className="error-message">{error}</p>}
         </form>
+        <AudioPlayer src="/sounds/SignInVoice.mp3" />
       </div>
     </div>
   );

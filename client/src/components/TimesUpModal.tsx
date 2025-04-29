@@ -18,7 +18,7 @@ export default function TimesUpModal({ onSubmit, error }: Props) {
     <div className="times-up-overlay">
       <div className="times-up-modal">
         <img
-          src="/images/TimeLimitPopUp.png"
+          src="/images/TimesUp-icon.png"
           alt="Time's Up"
           className="times-up-img"
         />

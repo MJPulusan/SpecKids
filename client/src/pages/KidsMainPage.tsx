@@ -4,44 +4,40 @@ import { readUser } from '../lib/auth';
 import { readTimeLimitByUserId, readUserEntries } from '../lib/data';
 import TimesUpModal from '../components/TimesUpModal';
 import { removeTimeLimitByUserId } from '../lib/data';
-import '../components/TimesUpModal.css';
+import '../KidsMain.css';
 
 export function KidsMain() {
   const navigate = useNavigate();
-  const [time, setTime] = useState(0); // seconds remaining
+  const [time, setTime] = useState(0);
   const [timeUp, setTimeUp] = useState(false);
   const [parentAuthError, setParentAuthError] = useState('');
   const [hasLoaded, setHasLoaded] = useState(false);
+  const user = readUser(); // the logged-in kid
 
-  // Load time limit on first mount only
   useEffect(() => {
-    const user = readUser();
     if (!user || user.role !== 'kid') {
       navigate('/login-form');
       return;
     }
+
     console.log('Kid logged in:', user.userId);
 
     readTimeLimitByUserId(user.userId)
       .then((limit) => {
-        console.log('Fetched time limit:', limit);
-
         if (!limit) {
           setTimeUp(true);
           return;
         }
-
         const total = limit.hoursLimit * 3600 + limit.minutesLimit * 60;
         setTime(total);
-        setHasLoaded(true); // only set once
+        setHasLoaded(true);
       })
       .catch((err) => {
         console.error('Error fetching time limit:', err);
         setTimeUp(true);
       });
-  }, []); //  only run once
+  }, []);
 
-  // Countdown TIMER logic
   useEffect(() => {
     if (!hasLoaded || timeUp || time <= 0) return;
 
@@ -59,7 +55,6 @@ export function KidsMain() {
     return () => clearInterval(id);
   }, [time, timeUp, hasLoaded]);
 
-  // Parent override
   async function handleParentLogin(username: string, password: string) {
     try {
       const users = await readUserEntries();
@@ -75,9 +70,8 @@ export function KidsMain() {
         return;
       }
 
-      const kid = readUser(); // if current session is a kid
-      if (kid?.role === 'kid') {
-        await removeTimeLimitByUserId(kid.userId); // delete the old timelimit
+      if (user?.role === 'kid') {
+        await removeTimeLimitByUserId(user.userId);
       }
 
       setTimeUp(false);
@@ -92,10 +86,15 @@ export function KidsMain() {
   const seconds = time % 60;
 
   return (
-    <div className="container">
+    <div className="kids-main-container">
       {timeUp && (
         <TimesUpModal onSubmit={handleParentLogin} error={parentAuthError} />
       )}
+
+      <header className="kids-header">
+        <img src="/images/logo.png" alt="SpecKids Logo" className="kids-logo" />
+        <h1>Hello, {user?.fullName || 'Kid'}!</h1>
+      </header>
 
       <div className="stopwatch">
         <div className="circle">
@@ -103,7 +102,18 @@ export function KidsMain() {
             {hours}h {minutes}m {seconds.toString().padStart(2, '0')}s
           </span>
         </div>
-        <h2>Welcome to SpecKids!</h2>
+      </div>
+
+      <div className="activity-grid">
+        <div className="activity-card" onClick={() => navigate('/sketchpad')}>
+          <img src="/images/sketchpad-icon.png" alt="Sketch Pad" />
+          <p>Sketch Pad</p>
+        </div>
+
+        <div className="activity-card" onClick={() => navigate('/color-game')}>
+          <img src="/images/guess_color_game.png" alt="Color Game" />
+          <p>Color Game</p>
+        </div>
       </div>
     </div>
   );

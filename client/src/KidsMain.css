@@ -1,0 +1,96 @@
+.kids-main-container {
+  background-color: #fcf2e1;
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+.kids-header {
+  margin-bottom: 2rem;
+}
+
+.kids-logo {
+  width: 120px;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: #6d4300;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+/* .stopwatch .circle {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: #dfefff;
+  border: 8px solid #4a90e2;
+  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+.stopwatch .time {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.activity-grid {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  background: #cfcbc6;
+  padding: 2rem;
+  border-radius: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.activity-card {
+  background: #00abc0;
+  padding: 1.5rem;
+  border-radius: 16px;
+  width: 160px;
+  cursor: pointer;
+  transition: transform 0.5s ease;
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(3deg);
+  }
+
+  50% {
+    transform: rotate(-3deg);
+  }
+
+  75% {
+    transform: rotate(2deg);
+  }
+}
+
+.activity-card:hover {
+  animation: wiggle 0.4s ease-in-out;
+}
+
+.activity-card img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 0.5rem;
+}
+
+.activity-card p {
+  color: white;
+  font-weight: bold;
+  margin: 0;
+  font-size: 1rem;
+}
