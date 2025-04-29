@@ -17,7 +17,7 @@ export default function HomePage() {
             </button>
             <button
               className="login-button"
-              onClick={() => navigate('/login-form')}>
+              onClick={() => navigate('/signin-form')}>
               Sign In
             </button>
           </div>

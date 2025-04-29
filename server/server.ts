@@ -283,38 +283,36 @@ app.delete(`/api/Schedules/:scheduleId`, async (req, res, next) => {
 
 // **************** START OF TIME LIMIT ******************
 
-app.get('/api/TimeLimits', async (req, res, next) => {
+// this displays time limit for specific user
+app.get('/api/TimeLimits/user/:userId', async (req, res, next) => {
   try {
+    const userId = Number(req.params.userId);
     const sql = `
-        SELECT *
-        FROM "TimeLimits"
+      SELECT * FROM "TimeLimits"
+      WHERE "userId" = $1
     `;
-    const result = await db.query(sql);
-    res.json(result.rows);
+    const result = await db.query(sql, [userId]);
+
+    if (!result.rows.length) {
+      return res.status(404).json(null);
+    }
+
+    res.json(result.rows[0]);
   } catch (err) {
-    next(err);
+    next(err); // 🔁 Let Express handle error
   }
 });
 
-// Display Time Limit List
-app.get('/api/TimeLimits/:limitId', async (req, res, next) => {
+// This removes the old timelimit (w/ modal pop-up login)
+app.delete('/api/TimeLimits/user/:userId', async (req, res, next) => {
   try {
-    const limitId = Number(req.params.limitId);
-
-    if (!Number.isInteger(limitId) || limitId < 1) {
-      throw new ClientError(400, 'limitId must be a positive integer');
-    }
-
+    const userId = Number(req.params.userId);
     const sql = `
-        SELECT *
-        FROM "TimeLimits"
-        WHERE "limitId" = $1
+      DELETE FROM "TimeLimits"
+      WHERE "userId" = $1
     `;
-
-    const result = await db.query(sql, [limitId]);
-    const user = result.rows[0];
-
-    res.json(result.rows);
+    await db.query(sql, [userId]);
+    res.sendStatus(204); // No Content
   } catch (err) {
     next(err);
   }

@@ -117,18 +117,20 @@ export async function removeSchedule(scheduleId: number): Promise<void> {
 
 // ***************** TIME LIMIT ENTRY ********************
 
-export async function readLimitEntries(): Promise<Limits[]> {
-  const res = await fetch(`/api/TimeLimits`);
-  if (!res.ok) throw new Error(`Failed to load list of Time Limits`);
+export async function readTimeLimitByUserId(
+  userId: number
+): Promise<Limits | undefined> {
+  const res = await fetch(`/api/TimeLimits/user/${userId}`);
+  if (!res.ok)
+    throw new Error(`Failed to load Time Limit for userId ${userId}`);
   return res.json();
 }
 
-export async function readTimeLimit(
-  limitId: number
-): Promise<Limits | undefined> {
-  const res = await fetch(`/api/TimeLimits/${limitId}`);
-  if (!res.ok) throw new Error(`Failed to load Time Limit`);
-  return res.json();
+export async function removeTimeLimitByUserId(userId: number): Promise<void> {
+  const res = await fetch(`/api/TimeLimits/user/${userId}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Failed to delete time limit');
 }
 
 export async function addTimeLimit(limit: Limits): Promise<Limits> {

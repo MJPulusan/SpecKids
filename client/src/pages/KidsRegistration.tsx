@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// to import my backend helper (kids-specific endpoint)
-import { addUserEntry } from '../lib/data'; // will adjust for my kids-specific function
+import { addUserEntry } from '../lib/data';
 import { AudioPlayer } from '../components/AudioPlayer';
 
 export function KidsRegForm() {
@@ -30,6 +29,7 @@ export function KidsRegForm() {
     setError(undefined);
 
     try {
+      // for Kids, as long as password is greater than 6 char, it is approve.
       if (password.length < 6) {
         setError('Password must be at least 6 characters long.');
         setIsSubmitting(false);

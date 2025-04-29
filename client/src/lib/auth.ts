@@ -7,6 +7,11 @@ export type User = {
 
 const authKey = 'um.auth';
 
+export function saveAuth(user: User, token: string): void {
+  const auth = { user, token };
+  localStorage.setItem(authKey, JSON.stringify(auth));
+}
+
 export function readUser(): User | undefined {
   const auth = localStorage.getItem(authKey);
   if (!auth) return undefined;

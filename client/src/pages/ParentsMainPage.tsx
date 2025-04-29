@@ -47,6 +47,7 @@ export function ParentsMain() {
               navigate('/kids-register');
             } else {
               setSelectedChild(Number(value));
+              localStorage.setItem('selectedChildId', value);
             }
           }}
           className="childSelect">
