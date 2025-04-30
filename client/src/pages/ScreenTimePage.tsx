@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addTimeLimit } from '../lib/data';
+import { readTimeLimitByUserId, updateTimeLimit } from '../lib/data';
 
 export function ScreenTimeForm() {
   const navigate = useNavigate();
@@ -14,11 +14,13 @@ export function ScreenTimeForm() {
 
     try {
       const kidId = localStorage.getItem('selectedChildId');
-      if (!kidId) {
-        throw new Error('No kid selected');
-      }
+      if (!kidId) throw new Error('No kid selected');
 
-      await addTimeLimit({
+      const existingLimit = await readTimeLimitByUserId(Number(kidId));
+      // console.log('submit', kidId, existingLimit);
+
+      await updateTimeLimit({
+        limitId: existingLimit?.limitId,
         userId: Number(kidId),
         hoursLimit: Number(hours),
         minutesLimit: Number(minutes),

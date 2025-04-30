@@ -2,14 +2,17 @@
 import 'dotenv/config';
 import express from 'express';
 import pg from 'pg';
-import { ClientError, errorMiddleware } from './lib/index.js';
+import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
+import { ClientError, errorMiddleware, authMiddleware } from './lib/index.js';
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: { rejectUnauthorized: false },
 });
+
+const hashKey = process.env.TOKEN_SECRET;
+if (!hashKey) throw new Error('TOKEN_SECRET not found in .env');
 
 const app = express();
 
@@ -22,49 +25,22 @@ app.use(express.static(reactStaticDir));
 app.use(express.static(uploadsStaticDir));
 app.use(express.json());
 
-// **************** START OF USERS ************************
+// ---------- AUTH ROUTES ----------
 
-app.get('/api/Users', async (req, res, next) => {
+app.post('/api/auth/sign-up', async (req, res, next) => {
   try {
-    const sql = `
-        SELECT *
-        FROM "Users"
-    `;
-    const result = await db.query(sql);
-    res.json(result.rows);
-  } catch (err) {
-    next(err);
-  }
-});
+    const { fullName, username, password, role } = req.body;
 
-// Displays kids list
-app.get('/api/Users/kids', async (req, res, next) => {
-  try {
-    const sql = `
-      SELECT "userId", "fullName"
-      FROM "Users"
-      WHERE "role" = 'kid';
-    `;
-    const result = await db.query(sql);
-    res.json(result.rows); // Returns an array of kids
-  } catch (err) {
-    next(err);
-  }
-});
-
-// Create User
-app.post('/api/Users', async (req, res, next) => {
-  try {
-    const { fullName, username, hashedPassword, role } = req.body;
-
-    if (!fullName || !username || !hashedPassword || !role) {
+    if (!fullName || !username || !password || !role) {
       throw new ClientError(400, 'All fields required');
     }
 
+    const hashedPassword = await argon2.hash(password);
+
     const sql = `
-    INSERT INTO "Users"("fullName", "username", "hashedPassword", "role")
-    VALUES ($1, $2, $3, $4)
-    RETURNING *;
+      INSERT INTO "Users" ("fullName", "username", "hashedPassword", "role")
+      VALUES ($1, $2, $3, $4)
+      RETURNING "userId", "username", "role", "createdAt"
     `;
 
     const params = [fullName, username, hashedPassword, role];
@@ -76,288 +52,211 @@ app.post('/api/Users', async (req, res, next) => {
   }
 });
 
-// Update Users
-app.put('/api/Users/:userId', async (req, res, next) => {
+app.post('/api/auth/sign-in', async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      throw new ClientError(401, 'Missing credentials');
+    }
+
+    const sql = 'SELECT * FROM "Users" WHERE "username" = $1';
+    const result = await db.query(sql, [username]);
+    const user = result.rows[0];
+
+    if (!user) {
+      throw new ClientError(401, 'Invalid login');
+    }
+
+    const isMatch = await argon2.verify(user.hashedPassword, password);
+    if (!isMatch) {
+      throw new ClientError(401, 'Invalid login');
+    }
+
+    const payload = {
+      userId: user.userId,
+      fullName: user.fullName,
+      username: user.username,
+      role: user.role,
+    };
+
+    const token = jwt.sign(payload, hashKey);
+    res.status(200).json({ user: payload, token });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ---------- USERS ----------
+
+app.get('/api/Users/kids', authMiddleware, async (req, res, next) => {
+  try {
+    const sql = `SELECT "userId", "fullName" FROM "Users" WHERE "role" = 'kid'`;
+    const result = await db.query(sql);
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/Users', authMiddleware, async (req, res, next) => {
+  try {
+    const { fullName, username, hashedPassword, role } = req.body;
+    if (!fullName || !username || !hashedPassword || !role)
+      throw new ClientError(400, 'All fields required');
+
+    const sql = `
+      INSERT INTO "Users"("fullName", "username", "hashedPassword", "role")
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+    const result = await db.query(sql, [
+      fullName,
+      username,
+      hashedPassword,
+      role,
+    ]);
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.put('/api/Users/:userId', authMiddleware, async (req, res, next) => {
   try {
     const { userId } = req.params;
     const { fullName, username, hashedPassword } = req.body;
-
-    if (!Number(userId)) {
-      throw new ClientError(400, 'userId must be a positive integer');
-    }
-
-    if (!fullName || !username || !hashedPassword) {
-      throw new ClientError(400, 'All fields required');
-    }
+    if (!Number(userId) || !fullName || !username || !hashedPassword)
+      throw new ClientError(400, 'Invalid input');
 
     const sql = `
-    UPDATE "Users"
-    SET "fullName" = $1,
-    "username" = $2,
-    "hashedPassword" = $3
-    WHERE "userId" = $4
-    RETURNING *;
+      UPDATE "Users"
+      SET "fullName" = $1, "username" = $2, "hashedPassword" = $3
+      WHERE "userId" = $4
+      RETURNING *;
     `;
-
-    const params = [fullName, username, hashedPassword, userId];
-    const result = await db.query(sql, params);
-
-    if (!result.rows[0]) {
-      throw new ClientError(404, `User with ${userId} ID not found`);
-    }
-
-    res.status(200).json(result.rows[0]);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// Delete User
-app.delete(`/api/Users/:userId`, async (req, res, next) => {
-  try {
-    const { userId } = req.params;
-
-    if (!Number(+userId)) {
-      throw new ClientError(400, `${userId} needs to be positive integer`);
-    }
-
-    const sql = `
-    DELETE FROM "Users"
-    WHERE "userId" = $1
-    RETURNING *;
-    `;
-
-    const result = await db.query(sql, [userId]);
-
-    if (!result.rows[0]) {
-      throw new ClientError(404, `${userId} not found.`);
-    }
-
-    res.sendStatus(204);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// Fetching all kids
-app.get('/api/Users/kids', async (req, res, next) => {
-  try {
-    const sql = `
-      SELECT "userId", "fullName"
-      FROM "Users"
-      WHERE "role" = 'kid';
-    `;
-    const result = await db.query(sql);
-    res.json(result.rows);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// **************** START OF SCHEDULES ******************
-
-app.get('/api/Schedules', async (req, res, next) => {
-  try {
-    const sql = `
-        SELECT *
-        FROM "Schedules"
-    `;
-    const result = await db.query(sql);
-    res.json(result.rows);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// Display Schedules list
-app.get('/api/Schedules/:scheduleId', async (req, res, next) => {
-  try {
-    const scheduleId = Number(req.params.scheduleId);
-
-    if (!Number.isInteger(scheduleId) || scheduleId < 1) {
-      throw new ClientError(400, 'scheduleId must be a positive integer');
-    }
-
-    const sql = `
-        SELECT *
-        FROM "Schedules"
-        WHERE "scheduleId" = $1
-    `;
-
-    const result = await db.query(sql, [scheduleId]);
-    const user = result.rows[0];
-
-    res.json(result.rows);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// Create Schedule
-app.post('/api/Schedules', async (req, res, next) => {
-  try {
-    const { userId, therapyName, timeOfDay, daysOfWeek } = req.body;
-
-    if (!userId || !therapyName || !timeOfDay || !daysOfWeek) {
-      throw new ClientError(400, 'All fields required');
-    }
-
-    const sql = `
-    INSERT INTO "Schedules"("userId","therapyName", "timeOfDay", "daysOfWeek")
-    VALUES ($1, $2, $3, $4)
-    RETURNING *;
-    `;
-
-    const params = [userId, therapyName, timeOfDay, daysOfWeek];
-    const result = await db.query(sql, params);
-
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// Update Schedules
-app.put('/api/Schedules/:scheduleId', async (req, res, next) => {
-  try {
-    const { scheduleId } = req.params;
-    const { userId, therapyName, timeOfDay, daysOfWeek } = req.body;
-
-    if (!Number(scheduleId)) {
-      throw new ClientError(400, 'scheduleId must be a positive integer');
-    }
-
-    if (!userId || !therapyName || !timeOfDay || !daysOfWeek) {
-      throw new ClientError(400, 'All fields required');
-    }
-
-    const sql = `
-    UPDATE "Schedules"
-    SET "userId" = $1,
-    "therapyName" = $2,
-    "timeOfDay" = $3,
-    "daysOfWeek" = $4
-    WHERE "scheduleId" = $5
-    RETURNING *;
-    `;
-
-    const params = [userId, therapyName, timeOfDay, daysOfWeek, scheduleId];
-    const result = await db.query(sql, params);
-
-    if (!result.rows[0]) {
-      throw new ClientError(404, `Schedule with ${scheduleId} ID not found`);
-    }
-
-    res.status(200).json(result.rows[0]);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// Delete Schedule
-app.delete(`/api/Schedules/:scheduleId`, async (req, res, next) => {
-  try {
-    const { scheduleId } = req.params;
-
-    if (!Number(+scheduleId)) {
-      throw new ClientError(400, `${scheduleId} needs to be positive integer`);
-    }
-
-    const sql = `
-    DELETE FROM "Schedules"
-    WHERE "scheduleId" = $1
-    RETURNING *;
-    `;
-
-    const result = await db.query(sql, [scheduleId]);
-
-    if (!result.rows[0]) {
-      throw new ClientError(404, `${scheduleId} not found.`);
-    }
-
-    res.sendStatus(204);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// **************** START OF TIME LIMIT ******************
-
-// this displays time limit for specific user
-app.get('/api/TimeLimits/user/:userId', async (req, res, next) => {
-  try {
-    const userId = Number(req.params.userId);
-    const sql = `
-      SELECT * FROM "TimeLimits"
-      WHERE "userId" = $1
-    `;
-    const result = await db.query(sql, [userId]);
-
-    if (!result.rows.length) {
-      return res.status(404).json(null);
-    }
-
+    const result = await db.query(sql, [
+      fullName,
+      username,
+      hashedPassword,
+      userId,
+    ]);
+    if (!result.rows[0]) throw new ClientError(404, 'User not found');
     res.json(result.rows[0]);
   } catch (err) {
-    next(err); // 🔁 Let Express handle error
+    next(err);
   }
 });
 
-// This removes the old timelimit (w/ modal pop-up login)
-app.delete('/api/TimeLimits/user/:userId', async (req, res, next) => {
+app.delete('/api/Users/:userId', authMiddleware, async (req, res, next) => {
   try {
-    const userId = Number(req.params.userId);
-    const sql = `
-      DELETE FROM "TimeLimits"
-      WHERE "userId" = $1
-    `;
-    await db.query(sql, [userId]);
-    res.sendStatus(204); // No Content
+    const { userId } = req.params;
+    if (!Number(userId)) throw new ClientError(400, 'Invalid userId');
+
+    const sql = 'DELETE FROM "Users" WHERE "userId" = $1 RETURNING *';
+    const result = await db.query(sql, [userId]);
+    if (!result.rows[0]) throw new ClientError(404, 'User not found');
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }
 });
 
-// Create TimeLimits
-app.post('/api/TimeLimits', async (req, res, next) => {
-  try {
-    const { userId, hoursLimit, minutesLimit } = req.body;
+// ---------- SCHEDULES ----------
 
-    if (
-      !Number(userId) ||
-      hoursLimit === undefined ||
-      minutesLimit === undefined
-    ) {
+app.get('/api/Schedules', authMiddleware, async (req, res, next) => {
+  try {
+    const sql = 'SELECT * FROM "Schedules"';
+    const result = await db.query(sql);
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/Schedules', authMiddleware, async (req, res, next) => {
+  try {
+    const { userId, therapyName, timeOfDay, daysOfWeek } = req.body;
+    if (!userId || !therapyName || !timeOfDay || !daysOfWeek)
       throw new ClientError(400, 'All fields required');
-    }
 
     const sql = `
-    INSERT INTO "TimeLimits"("userId", "hoursLimit", "minutesLimit")
-    VALUES ($1, $2, $3)
-    RETURNING *;
+      INSERT INTO "Schedules"("userId", "therapyName", "timeOfDay", "daysOfWeek")
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
     `;
-
-    const params = [userId, hoursLimit, minutesLimit];
-    const result = await db.query(sql, params);
-
+    const result = await db.query(sql, [
+      userId,
+      therapyName,
+      timeOfDay,
+      daysOfWeek,
+    ]);
     res.status(201).json(result.rows[0]);
   } catch (err) {
     next(err);
   }
 });
 
-// Update TimeLimits
-app.put('/api/TimeLimits/:limitId', async (req, res, next) => {
+app.delete(
+  '/api/Schedules/:scheduleId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const scheduleId = Number(req.params.scheduleId);
+      if (!scheduleId) throw new ClientError(400, 'Invalid scheduleId');
+
+      const sql = 'DELETE FROM "Schedules" WHERE "scheduleId" = $1 RETURNING *';
+      const result = await db.query(sql, [scheduleId]);
+      if (!result.rows[0]) throw new ClientError(404, 'Schedule not found');
+      res.sendStatus(204);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// ---------- TIME LIMITS ----------
+
+app.get(
+  '/api/TimeLimits/user/:userId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const userId = Number(req.params.userId);
+      const sql = 'SELECT * FROM "TimeLimits" WHERE "userId" = $1';
+      const result = await db.query(sql, [userId]);
+      res.status(result.rows.length ? 200 : 404).json(result.rows[0] || null);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.post('/api/TimeLimits', authMiddleware, async (req, res, next) => {
   try {
-    const { limitId } = req.params;
+    const { userId, hoursLimit, minutesLimit } = req.body;
+    if (!userId || hoursLimit === undefined || minutesLimit === undefined)
+      throw new ClientError(400, 'All fields required');
+
+    const sql = `
+      INSERT INTO "TimeLimits"("userId", "hoursLimit", "minutesLimit")
+      VALUES ($1, $2, $3)
+      RETURNING *;
+    `;
+    const result = await db.query(sql, [userId, hoursLimit, minutesLimit]);
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.put('/api/TimeLimits/:limitId', authMiddleware, async (req, res, next) => {
+  try {
+    const limitId = Number(req.params.limitId);
     const { userId, hoursLimit, minutesLimit } = req.body;
 
-    if (!Number.isInteger(Number(limitId)) || Number(limitId) < 1) {
-      throw new ClientError(400, 'limitId must be a positive integer');
-    }
-
     if (
-      !Number(userId) ||
+      !limitId ||
+      !userId ||
       hoursLimit === undefined ||
       minutesLimit === undefined
     ) {
@@ -365,53 +264,41 @@ app.put('/api/TimeLimits/:limitId', async (req, res, next) => {
     }
 
     const sql = `
-    UPDATE "TimeLimits"
-    SET "userId" = $1,
-    "hoursLimit" = $2,
-    "minutesLimit" = $3
-    WHERE "limitId" = $4
-    RETURNING *;
+      UPDATE "TimeLimits"
+      SET "userId" = $1,
+          "hoursLimit" = $2,
+          "minutesLimit" = $3
+      WHERE "limitId" = $4
+      RETURNING *;
     `;
 
-    const params = [userId, hoursLimit, minutesLimit, limitId];
-    const result = await db.query(sql, params);
-
-    if (!result.rows[0]) {
-      throw new ClientError(404, `Time limit with ${limitId} ID not found`);
-    }
-
+    const result = await db.query(sql, [
+      userId,
+      hoursLimit,
+      minutesLimit,
+      limitId,
+    ]);
+    if (!result.rows[0]) throw new ClientError(404, 'TimeLimit not found');
     res.status(200).json(result.rows[0]);
   } catch (err) {
     next(err);
   }
 });
 
-// Delete Time Limit
-app.delete(`/api/TimeLimits/:limitId`, async (req, res, next) => {
-  try {
-    const { limitId } = req.params;
-
-    if (!Number(+limitId)) {
-      throw new ClientError(400, `${limitId} needs to be positive integer`);
+app.delete(
+  '/api/TimeLimits/user/:userId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const userId = Number(req.params.userId);
+      const sql = 'DELETE FROM "TimeLimits" WHERE "userId" = $1';
+      await db.query(sql, [userId]);
+      res.sendStatus(204);
+    } catch (err) {
+      next(err);
     }
-
-    const sql = `
-    DELETE FROM "TimeLimits"
-    WHERE "limitId" = $1
-    RETURNING *;
-    `;
-
-    const result = await db.query(sql, [limitId]);
-
-    if (!result.rows[0]) {
-      throw new ClientError(404, `${limitId} not found.`);
-    }
-
-    res.sendStatus(204);
-  } catch (err) {
-    next(err);
   }
-});
+);
 
 /*
  * Handles paths that aren't handled by any other route handler.

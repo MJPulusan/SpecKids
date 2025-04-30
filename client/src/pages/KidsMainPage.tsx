@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { readUser } from '../lib/auth';
-import { readTimeLimitByUserId, readUserEntries } from '../lib/data';
+import { readUser, signIn, saveAuth } from '../lib/data';
+import { readTimeLimitByUserId } from '../lib/data';
 import TimesUpModal from '../components/TimesUpModal';
-import { removeTimeLimitByUserId } from '../lib/data';
 import '../KidsMain.css';
 
 export function KidsMain() {
@@ -20,23 +19,45 @@ export function KidsMain() {
       return;
     }
 
-    console.log('Kid logged in:', user.userId);
-
-    readTimeLimitByUserId(user.userId)
-      .then((limit) => {
+    async function fetchLimit() {
+      try {
+        if (!user?.userId) {
+          setTimeUp(true);
+          return;
+        }
+        const limit = await readTimeLimitByUserId(user.userId!);
         if (!limit) {
           setTimeUp(true);
           return;
         }
+
         const total = limit.hoursLimit * 3600 + limit.minutesLimit * 60;
         setTime(total);
         setHasLoaded(true);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error('Error fetching time limit:', err);
         setTimeUp(true);
-      });
-  }, []);
+      }
+    }
+
+    fetchLimit();
+  }, [navigate]); // didn't include "user" as it reset time after 1sec
+
+  //   readTimeLimitByUserId(user.userId!)
+  //     .then((limit) => {
+  //       if (!limit) {
+  //         setTimeUp(true);
+  //         return;
+  //       }
+  //       const total = limit.hoursLimit * 3600 + limit.minutesLimit * 60;
+  //       setTime(total);
+  //       setHasLoaded(true);
+  //     })
+  //     .catch((err) => {
+  //       console.error('Error fetching time limit:', err);
+  //       setTimeUp(true);
+  //     });
+  // }, []);
 
   useEffect(() => {
     if (!hasLoaded || timeUp || time <= 0) return;
@@ -57,27 +78,27 @@ export function KidsMain() {
 
   async function handleParentLogin(username: string, password: string) {
     try {
-      const users = await readUserEntries();
-      const parent = users.find(
-        (u) =>
-          u.username === username &&
-          u.hashedPassword === password &&
-          u.role === 'parent'
-      );
+      const { user: parentUser, token } = await signIn(username, password);
 
-      if (!parent) {
+      if (parentUser.role !== 'parent') {
         setParentAuthError('Oops! This section is for parents only.');
         return;
       }
 
-      if (user?.role === 'kid') {
-        await removeTimeLimitByUserId(user.userId);
+      saveAuth(parentUser, token);
+
+      // Runtime check for user before accessing .userId
+      if (!user || !user.userId) {
+        setParentAuthError('Missing kid session info.');
+        return;
       }
 
+      // await removeTimeLimitByUserId(user.userId);
       setTimeUp(false);
+      setHasLoaded(false); //allow countdown to reload
       navigate('/parents-main');
     } catch {
-      setParentAuthError('Login failed');
+      setParentAuthError('Login failed. Please check credentials.');
     }
   }
 
@@ -118,5 +139,3 @@ export function KidsMain() {
     </div>
   );
 }
-
-// I use padStart() for my time to adds characters to the beginning of a string until it reaches the desired limit.

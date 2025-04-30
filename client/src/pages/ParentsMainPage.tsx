@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { readUser } from '../lib/auth';
-import { readKidEntries } from '../lib/data';
+import { readKidEntries, readUser } from '../lib/data';
 
 export function ParentsMain() {
   const navigate = useNavigate();
-  const parentName = readUser()?.fullName || 'Parent';
+  const [parentName, setParentName] = useState('Parent');
   const [selectedChild, setSelectedChild] = useState<number | ''>('');
   const [children, setChildren] = useState<
     { userId: number; fullName: string }[]
   >([]);
 
   useEffect(() => {
+    const user = readUser();
+    if (user && user.role === 'parent') {
+      setParentName(user.fullName);
+    }
+
     async function fetchChildren() {
       try {
         const kids = await readKidEntries();
@@ -27,8 +31,10 @@ export function ParentsMain() {
         setChildren([]);
       }
     }
+
     fetchChildren();
   }, []);
+
   return (
     <div className="parentsMainPage">
       <div className="header">

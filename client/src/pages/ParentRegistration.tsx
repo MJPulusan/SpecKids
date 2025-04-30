@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addUserEntry } from '../lib/data';
+import { registerParent, signIn, saveAuth } from '../lib/data';
 import { AudioPlayer } from '../components/AudioPlayer';
 
 export function ParentRegForm() {
@@ -40,12 +40,11 @@ export function ParentRegForm() {
         return;
       }
 
-      await addUserEntry({
-        fullName,
-        username,
-        hashedPassword: password,
-        role: 'parent',
-      });
+      await registerParent(fullName, username, password);
+
+      const { user, token } = await signIn(username, password);
+      saveAuth(user, token);
+
       navigate('/kids-register'); // KIDS register page.
     } catch {
       setError('Registration failed. Please try again.');
