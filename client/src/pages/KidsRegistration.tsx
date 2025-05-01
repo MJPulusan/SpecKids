@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addUserEntry } from '../lib/data';
 import { AudioPlayer } from '../components/AudioPlayer';
+import { registerKid } from '../lib/data';
 
 export function KidsRegForm() {
   const navigate = useNavigate();
@@ -22,30 +22,24 @@ export function KidsRegForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     const { fullName, username, password } = form;
     setIsSubmitting(true);
     setError(undefined);
 
     try {
-      // for Kids, as long as password is greater than 6 char, it is approve.
-      if (password.length < 6) {
-        setError('Password must be at least 6 characters long.');
+      if (password.length < 4) {
+        setError('Password must be at least 4 characters.');
         setIsSubmitting(false);
         return;
       }
 
-      await addUserEntry({
-        fullName,
-        username,
-        hashedPassword: password,
-        role: 'kid',
-      });
-
-      navigate('/parents-main'); // Go to PARENTS MAIN PAGE
+      await registerKid(fullName, username, password);
+      setForm({ fullName: '', username: '', password: '' });
+      navigate('/parents-main');
     } catch {
-      setError('Kid registration failed. Please try again.');
+      setError('Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

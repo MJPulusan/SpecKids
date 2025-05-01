@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { readUserEntries } from '../lib/data';
-import { saveAuth } from '../lib/auth';
+import { saveAuth, signIn } from '../lib/data';
 import { AudioPlayer } from '../components/AudioPlayer';
 
 export function SignInForm() {
@@ -15,35 +14,12 @@ export function SignInForm() {
     setError(undefined);
 
     try {
-      const users = await readUserEntries();
-      const user = users.find(
-        (u) => u.username === username && u.hashedPassword === password
-      );
+      const { user, token } = await signIn(username, password);
 
-      if (!user || !user.userId) {
-        setError('Invalid username, password, or missing userId');
-        return;
-      }
-
-      saveAuth(
-        {
-          userId: user.userId ?? 0, // fallback if undefined, but should exist after database fetch
-          fullName: user.fullName,
-          username: user.username,
-          role: user.role,
-        },
-        'fake-token'
-      ); // Save to local storage or context
-
-      if (user.role === 'parent') {
-        navigate('/parents-main');
-      } else if (user.role === 'kid') {
-        localStorage.setItem('selectedChildId', user.userId?.toString() || '');
-        navigate('/kids-main');
-      }
+      saveAuth(user, token); // your saveAuth() function stores in localStorage
+      navigate(user.role === 'parent' ? '/parents-main' : '/kids/kids-main');
     } catch (err) {
-      console.error(err);
-      setError('Sign in failed. Please try again.');
+      setError('Login failed. Please check your username and password.');
     }
   }
 
