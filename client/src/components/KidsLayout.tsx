@@ -15,7 +15,7 @@ export default function KidsLayout() {
 
   return (
     <div>
-      <Outlet /> {/* Renders nested kid routes */}
+      <Outlet /> {/* Render nested kid routes */}
     </div>
   );
 }
