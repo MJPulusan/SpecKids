@@ -17,7 +17,7 @@ export function SignInForm() {
       const { user, token } = await signIn(username, password);
 
       saveAuth(user, token); // your saveAuth() function stores in localStorage
-      navigate(user.role === 'parent' ? '/parents-main' : '/kids-main');
+      navigate(user.role === 'parent' ? '/parents-main' : '/kids/kids-main');
     } catch (err) {
       setError('Login failed. Please check your username and password.');
     }

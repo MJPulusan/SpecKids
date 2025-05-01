@@ -20,7 +20,24 @@ export default function Sketch() {
   }
 
   function handleClose() {
-    navigate('/kids-main'); // KIDS MAIN Page
+    navigate('/kids/kids-main'); // KIDS MAIN Page
+  }
+
+  function handleSave() {
+    if (canvasRef.current) {
+      // This grabs actual canvas element.
+      const image = canvasRef.current.canvasContainer
+        .children[1] as HTMLCanvasElement;
+
+      // Convert to PNG Data URL.
+      const pngDataUrl = image.toDataURL('image/png');
+
+      // download the save file.
+      const link = document.createElement('a');
+      link.download = 'my-sketch.png';
+      link.href = pngDataUrl;
+      link.click();
+    }
   }
 
   return (
@@ -43,7 +60,7 @@ export default function Sketch() {
         hideGrid
         className="canvas-style"
       />
-      <button>Save</button>
+      <button onClick={handleSave}>Save</button>
       <button onClick={handleUndo}>Undo ↺</button>
       <button onClick={handleErase}>Erase</button>
       <button onClick={handleClose}>Close</button>
