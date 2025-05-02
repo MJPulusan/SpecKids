@@ -1,9 +1,9 @@
 import Sketch from '../components/SketchPad';
 import '../App.css';
 
-export default function SketchPage() {
+export function SketchPage() {
   return (
-    <div className="sketchContainer">
+    <div className="form-container">
       <div className="no-touch-scroll">
         <h1>Sketch Pad</h1>
         <Sketch />

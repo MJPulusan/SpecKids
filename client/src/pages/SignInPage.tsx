@@ -29,7 +29,7 @@ export function SignInForm() {
 
   return (
     <div className="sign-in-page">
-      <div className="sign-in-container">
+      <div className="form-container">
         <div className="sign-in-header">
           <h2>Login</h2>
           <button className="exitButton" onClick={handleExit}>
@@ -59,7 +59,6 @@ export function SignInForm() {
           <button type="submit" className="signInButton">
             Sign In
           </button>
-
           {error && <p className="error-message">{error}</p>}
         </form>
         <AudioPlayer src="/sounds/SignInVoice.mp3" />

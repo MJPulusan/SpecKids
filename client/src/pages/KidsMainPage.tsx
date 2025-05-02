@@ -29,6 +29,7 @@ export function KidsMain() {
 
   if (!user || user.role !== 'kid') return null;
 
+  // Login for Parents in Pop-up Form
   async function handleParentLogin(username: string, password: string) {
     try {
       const { user: parentUser, token } = await signIn(username, password);
@@ -57,6 +58,9 @@ export function KidsMain() {
         <img src="/images/logo.png" alt="SpecKids Logo" className="kids-logo" />
         <h1>Hello, {user.fullName || 'Kid'}!</h1>
       </header>
+      <button className="exit-button" onClick={() => setTimeUp(true)}>
+        <img src="/images/close.png" alt="Close" className="closeIcon" />
+      </button>
 
       <div className="stopwatch">
         <div className="circle">

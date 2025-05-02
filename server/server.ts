@@ -104,6 +104,20 @@ app.post('/api/Users', authMiddleware, async (req, res, next) => {
     if (!fullName || !username || !hashedPassword || !role)
       throw new ClientError(400, 'All fields required');
 
+    // CHECKER: IF USERNAME ALREADY EXISTS.
+    const checkSql = `
+      SELECT 1 FROM "Users" WHERE "username" = $1
+    `;
+    const checkResult = await db.query(checkSql, [username]);
+
+    if (checkResult.rows.length > 0) {
+      throw new ClientError(
+        409,
+        'There is already an existing account with this username.'
+      );
+    }
+
+    // ACCEPT USER IF NO CONFLICT.
     const sql = `
       INSERT INTO "Users"("fullName", "username", "hashedPassword", "role")
       VALUES ($1, $2, $3, $4)
@@ -115,6 +129,7 @@ app.post('/api/Users', authMiddleware, async (req, res, next) => {
       hashedPassword,
       role,
     ]);
+
     res.status(201).json(result.rows[0]);
   } catch (err) {
     next(err);
@@ -163,24 +178,34 @@ app.delete('/api/Users/:userId', authMiddleware, async (req, res, next) => {
 
 // ---------- SCHEDULES ----------
 
-app.get('/api/Schedules', authMiddleware, async (req, res, next) => {
+// GET all therapies for a user
+app.get('/api/Schedules/:userId', authMiddleware, async (req, res, next) => {
   try {
-    const sql = 'SELECT * FROM "Schedules"';
-    const result = await db.query(sql);
+    const { userId } = req.params;
+    const sql = `
+      SELECT * FROM "Schedules"
+      WHERE "userId" = $1
+      ORDER BY "scheduleId" DESC;
+    `;
+    const result = await db.query(sql, [userId]);
     res.json(result.rows);
   } catch (err) {
+    console.error('Error fetching schedules:', err);
     next(err);
   }
 });
 
+// POST a new therapy schedule
 app.post('/api/Schedules', authMiddleware, async (req, res, next) => {
   try {
     const { userId, therapyName, timeOfDay, daysOfWeek } = req.body;
-    if (!userId || !therapyName || !timeOfDay || !daysOfWeek)
+
+    if (!userId || !therapyName || !timeOfDay || !daysOfWeek) {
       throw new ClientError(400, 'All fields required');
+    }
 
     const sql = `
-      INSERT INTO "Schedules"("userId", "therapyName", "timeOfDay", "daysOfWeek")
+      INSERT INTO "Schedules" ("userId", "therapyName", "timeOfDay", "daysOfWeek")
       VALUES ($1, $2, $3, $4)
       RETURNING *;
     `;
@@ -196,23 +221,19 @@ app.post('/api/Schedules', authMiddleware, async (req, res, next) => {
   }
 });
 
-app.delete(
-  '/api/Schedules/:scheduleId',
-  authMiddleware,
-  async (req, res, next) => {
-    try {
-      const scheduleId = Number(req.params.scheduleId);
-      if (!scheduleId) throw new ClientError(400, 'Invalid scheduleId');
+app.delete('/api/Schedules/:scheduleId', async (req, res, next) => {
+  try {
+    const scheduleId = Number(req.params.scheduleId);
+    if (!scheduleId) throw new ClientError(400, 'Invalid scheduleId');
 
-      const sql = 'DELETE FROM "Schedules" WHERE "scheduleId" = $1 RETURNING *';
-      const result = await db.query(sql, [scheduleId]);
-      if (!result.rows[0]) throw new ClientError(404, 'Schedule not found');
-      res.sendStatus(204);
-    } catch (err) {
-      next(err);
-    }
+    const sql = 'DELETE FROM "Schedules" WHERE "scheduleId" = $1 RETURNING *';
+    const result = await db.query(sql, [scheduleId]);
+    if (!result.rows[0]) throw new ClientError(404, 'Schedule not found');
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
   }
-);
+});
 
 // ---------- TIME LIMITS ----------
 

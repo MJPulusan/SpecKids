@@ -39,7 +39,7 @@ export function ScreenTimeForm() {
 
   return (
     <div className="screenTimePage">
-      <div className="screenTimeContainer">
+      <div className="form-container">
         <h2>Screen Time</h2>
         <form onSubmit={handleSubmit} className="screenTimeForm">
           <div className="inputRow">
