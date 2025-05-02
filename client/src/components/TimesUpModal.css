@@ -25,13 +25,12 @@
   border-radius: 20px;
 }
 
-.parent-login-form input {
+.parent-login-form {
   display: block;
   width: 100%;
   margin: 0.5rem 0;
   padding: 0.5rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  justify-content: center;
 }
 
 .parent-login-form button {

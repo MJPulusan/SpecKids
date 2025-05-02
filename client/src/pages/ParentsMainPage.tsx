@@ -36,7 +36,7 @@ export function ParentsMain() {
   }, []);
 
   return (
-    <div className="parentsMainPage">
+    <div className="form-container">
       <div className="header">
         <h2>Welcome, {parentName}!</h2>
         <button className="exitButton" onClick={() => navigate('/')}>
@@ -44,7 +44,7 @@ export function ParentsMain() {
         </button>
       </div>
 
-      <div className="contentBox">
+      <div className="card">
         <select
           value={selectedChild}
           onChange={(e) => {

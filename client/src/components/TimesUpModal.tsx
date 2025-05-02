@@ -30,7 +30,9 @@ export default function TimesUpModal({ onSubmit, error }: Props) {
             placeholder="Password"
             required
           />
-          <button type="submit">Login</button>
+          <div>
+            <button type="submit">Login</button>
+          </div>
           {error && <p className="error-text">{error}</p>}
         </form>
       </div>

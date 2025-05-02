@@ -53,14 +53,14 @@ export function TimerProvider({
       console.error('Error fetching time limit:', err);
       setTimeUp(true);
     }
-  }, [user]);
+  }, [user?.userId]);
 
   useEffect(() => {
     fetchLimit();
   }, [fetchLimit]);
 
   useEffect(() => {
-    if (!hasLoaded || timeUp || time <= 0) return;
+    if (!hasLoaded || timeUp) return;
 
     const id = setInterval(() => {
       setTime((prev) => {
@@ -74,7 +74,7 @@ export function TimerProvider({
     }, 1000);
 
     return () => clearInterval(id);
-  }, [hasLoaded, timeUp, time]);
+  }, [hasLoaded, timeUp]);
 
   const reloadTimer = useCallback(() => {
     setHasLoaded(false);

@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 
-export default function HomePage() {
+export function HomePage() {
   const navigate = useNavigate();
 
   return (
     <>
       <div className="homepage-background">
         <img src="/images/logo.png" alt="SpecKids Logo" className="logo" />
-        <h1 className="frontLogo">Kids in Spectrum</h1>
+        {/* <h1 className="frontLogo">Kids in Spectrum</h1> */}
         <div className="login-container">
           <div className="button-group">
             <button

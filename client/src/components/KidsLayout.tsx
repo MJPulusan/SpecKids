@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { readUser } from '../lib/data';
 import '../KidsMain.css';
+import { TimerProvider } from './TimerContext';
 
 export default function KidsLayout() {
   const navigate = useNavigate();
@@ -15,7 +16,11 @@ export default function KidsLayout() {
 
   return (
     <div>
-      <Outlet /> {/* Renders nested kid routes */}
+      {user && user.role === 'kid' && (
+        <TimerProvider user={user}>
+          <Outlet /> {/* Renders nested kid routes */}
+        </TimerProvider>
+      )}
     </div>
   );
 }

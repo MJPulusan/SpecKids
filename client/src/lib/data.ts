@@ -107,6 +107,16 @@ export async function registerKid(
   }
 }
 
+export async function readKidEntries(): Promise<UserEntry[]> {
+  const res = await fetch('/api/Users/kids', {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  });
+  if (!res.ok) throw new Error('Failed to load Kids');
+  return res.json();
+}
+
 export async function readTimeLimitByUserId(
   userId: number
 ): Promise<Limits | undefined> {
@@ -159,135 +169,167 @@ export async function removeTimeLimitByUserId(userId: number): Promise<void> {
   if (!res.ok) throw new Error('Failed to delete time limit');
 }
 
+export async function readSchedulesByUserId(
+  userId: number
+): Promise<Schedule[]> {
+  const res = await fetch(`/api/Schedules/${userId}`, {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  });
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error('Server error:', res.status, errorText);
+    throw new Error('Failed to fetch schedules');
+  }
+  return res.json();
+}
+
+export async function addSchedule(schedule: {
+  userId: number;
+  therapyName: string;
+  timeOfDay: string;
+  daysOfWeek: string;
+}): Promise<Schedule> {
+  const token = readToken();
+
+  const res = await fetch('/api/schedules', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(schedule),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error('Failed to save schedule:', res.status, text);
+    throw new Error('Failed to save schedule');
+  }
+
+  return res.json();
+}
+
 // *************** USER ENTRY *********************
 
-export async function readUserEntries(): Promise<UserEntry[]> {
-  const res = await fetch('/api/Users', {
-    headers: {
-      Authorization: `Bearer ${readToken()}`,
-    },
-  });
-  if (!res.ok) throw new Error('Failed to load User Entry');
-  return res.json();
-}
+// export async function readUserEntries(): Promise<UserEntry[]> {
+//   const res = await fetch('/api/Users', {
+//     headers: {
+//       Authorization: `Bearer ${readToken()}`,
+//     },
+//   });
+//   if (!res.ok) throw new Error('Failed to load User Entry');
+//   return res.json();
+// }
 
-export async function readUserEntry(
-  userId: number
-): Promise<UserEntry | undefined> {
-  const res = await fetch(`/api/Users/${userId}`, {
-    headers: {
-      Authorization: `Bearer ${readToken()}`,
-    },
-  });
-  if (!res.ok) throw new Error('Failed to load User Entry');
-  return res.json();
-}
+// export async function readUserEntry(
+//   userId: number
+// ): Promise<UserEntry | undefined> {
+//   const res = await fetch(`/api/Users/${userId}`, {
+//     headers: {
+//       Authorization: `Bearer ${readToken()}`,
+//     },
+//   });
+//   if (!res.ok) throw new Error('Failed to load User Entry');
+//   return res.json();
+// }
 
-export async function readKidEntries(): Promise<UserEntry[]> {
-  const res = await fetch('/api/Users/kids', {
-    headers: {
-      Authorization: `Bearer ${readToken()}`,
-    },
-  });
-  if (!res.ok) throw new Error('Failed to load Kids');
-  return res.json();
-}
+// export async function addUserEntry(user: UserEntry): Promise<UserEntry> {
+//   const res = await fetch('/api/Users', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Authorization: `Bearer ${readToken()}`,
+//     },
+//     body: JSON.stringify(user),
+//   });
+//   if (!res.ok) throw new Error('Failed to add User Entry');
+//   return res.json();
+// }
 
-export async function addUserEntry(user: UserEntry): Promise<UserEntry> {
-  const res = await fetch('/api/Users', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${readToken()}`,
-    },
-    body: JSON.stringify(user),
-  });
-  if (!res.ok) throw new Error('Failed to add User Entry');
-  return res.json();
-}
+// export async function updateUserEntry(user: UserEntry): Promise<UserEntry> {
+//   const res = await fetch(`/api/Users/${user.userId}`, {
+//     method: 'PUT',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Authorization: `Bearer ${readToken()}`,
+//     },
+//     body: JSON.stringify(user),
+//   });
+//   if (!res.ok) throw new Error('Failed to update User Entry');
+//   return res.json();
+// }
 
-export async function updateUserEntry(user: UserEntry): Promise<UserEntry> {
-  const res = await fetch(`/api/Users/${user.userId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${readToken()}`,
-    },
-    body: JSON.stringify(user),
-  });
-  if (!res.ok) throw new Error('Failed to update User Entry');
-  return res.json();
-}
+// export async function removeUserEntry(userId: number): Promise<void> {
+//   const res = await fetch(`/api/Users/${userId}`, {
+//     method: 'DELETE',
+//     headers: {
+//       Authorization: `Bearer ${readToken()}`,
+//     },
+//   });
+//   if (!res.ok) throw new Error('Failed to delete User Entry');
+// }
 
-export async function removeUserEntry(userId: number): Promise<void> {
-  const res = await fetch(`/api/Users/${userId}`, {
-    method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${readToken()}`,
-    },
-  });
-  if (!res.ok) throw new Error('Failed to delete User Entry');
-}
+// // ***************** SCHEDULE ENTRY ********************
 
-// ***************** SCHEDULE ENTRY ********************
+// export async function readScheduleEntries(): Promise<Schedule[]> {
+//   const res = await fetch('/api/Schedules', {
+//     headers: {
+//       Authorization: `Bearer ${readToken()}`,
+//     },
+//   });
+//   if (!res.ok) throw new Error('Failed to load list of Therapy Schedule');
+//   return res.json();
+// }
 
-export async function readScheduleEntries(): Promise<Schedule[]> {
-  const res = await fetch('/api/Schedules', {
-    headers: {
-      Authorization: `Bearer ${readToken()}`,
-    },
-  });
-  if (!res.ok) throw new Error('Failed to load list of Therapy Schedule');
-  return res.json();
-}
+// export async function readTherapySchedule(
+//   scheduleId: number
+// ): Promise<Schedule | undefined> {
+//   const res = await fetch(`/api/Schedules/${scheduleId}`, {
+//     headers: {
+//       Authorization: `Bearer ${readToken()}`,
+//     },
+//   });
+//   if (!res.ok) throw new Error('Failed to load Therapy Schedule');
+//   return res.json();
+// }
 
-export async function readTherapySchedule(
-  scheduleId: number
-): Promise<Schedule | undefined> {
-  const res = await fetch(`/api/Schedules/${scheduleId}`, {
-    headers: {
-      Authorization: `Bearer ${readToken()}`,
-    },
-  });
-  if (!res.ok) throw new Error('Failed to load Therapy Schedule');
-  return res.json();
-}
+// export async function addSchedule(schedule: Schedule): Promise<Schedule> {
+//   const res = await fetch('/api/Schedules', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Authorization: `Bearer ${readToken()}`,
+//     },
+//     body: JSON.stringify(schedule),
+//   });
+//   if (!res.ok) throw new Error('Failed to add Therapy Schedule');
+//   return res.json();
+// }
 
-export async function addSchedule(schedule: Schedule): Promise<Schedule> {
-  const res = await fetch('/api/Schedules', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${readToken()}`,
-    },
-    body: JSON.stringify(schedule),
-  });
-  if (!res.ok) throw new Error('Failed to add Therapy Schedule');
-  return res.json();
-}
+// export async function updateSchedule(schedule: Schedule): Promise<Schedule> {
+//   const res = await fetch(`/api/Schedules/${schedule.scheduleId}`, {
+//     method: 'PUT',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Authorization: `Bearer ${readToken()}`,
+//     },
+//     body: JSON.stringify(schedule),
+//   });
+//   if (!res.ok) throw new Error('Failed to update Therapy Schedule');
+//   return res.json();
+// }
 
-export async function updateSchedule(schedule: Schedule): Promise<Schedule> {
-  const res = await fetch(`/api/Schedules/${schedule.scheduleId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${readToken()}`,
-    },
-    body: JSON.stringify(schedule),
-  });
-  if (!res.ok) throw new Error('Failed to update Therapy Schedule');
-  return res.json();
-}
-
-export async function removeSchedule(scheduleId: number): Promise<void> {
-  const res = await fetch(`/api/Schedules/${scheduleId}`, {
-    method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${readToken()}`,
-    },
-  });
-  if (!res.ok) throw new Error('Failed to delete Therapy Schedule');
-}
+// export async function removeSchedule(scheduleId: number): Promise<void> {
+//   const res = await fetch(`/api/Schedules/${scheduleId}`, {
+//     method: 'DELETE',
+//     headers: {
+//       Authorization: `Bearer ${readToken()}`,
+//     },
+//   });
+//   if (!res.ok) throw new Error('Failed to delete Therapy Schedule');
+// }
 
 // export async function removeTimeLimit(limitId: number): Promise<void> {
 //   const res = await fetch(`/api/TimeLimits/${limitId}`, {
