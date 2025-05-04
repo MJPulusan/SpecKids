@@ -5,9 +5,33 @@ body {
   background-image: url('/images/logo.png');
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: 50%;
   height: 100vh;
   margin: 0;
+  background-size: 40% auto;
+  animation: heartbeatBg 5s ease-in-out infinite;
+}
+
+@keyframes heartbeatBg {
+  0%,
+  100% {
+    background-size: 40% auto;
+  }
+
+  20% {
+    background-size: 45% auto;
+  }
+
+  40% {
+    background-size: 40% auto;
+  }
+
+  60% {
+    background-size: 45% auto;
+  }
+
+  80% {
+    background-size: 40% auto;
+  }
 }
 
 /* FOR MOBILE VIEW */
@@ -18,14 +42,16 @@ body {
   }
 }
 
-.logo {
-  max-width: 50%;
-  background-position: top center;
-}
-
 .homepage-background {
   background-color: #fdf3e2;
   min-height: 100vh;
+}
+
+@media (width <= 480px) {
+  .logo {
+    background-size: 60vw;
+    background-position: center;
+  }
 }
 
 #root {
@@ -95,6 +121,32 @@ p {
   top: 52%;
 }
 
+.logo {
+  max-width: 50%;
+  background-position: top center;
+  width: 1500px;
+  animation: bounceIn 2s ease infinite;
+  animation-fill-mode: forwards;
+}
+
+@keyframes bounceIn {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-30px);
+  }
+
+  60% {
+    transform: translateY(-15px);
+  }
+}
+
 label {
   display: block;
   font-size: x-large;
@@ -162,6 +214,9 @@ button:focus-visible {
 .canvas-style {
   border: 2px solid #ccc;
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  position: relative;
 }
 
 .exitButton {
@@ -182,12 +237,12 @@ button:focus-visible {
 
 .sign-in-header h2,
 .card {
-  padding-left: 3rem;
+  justify-content: center;
   display: flex;
 }
 
 .card {
-  padding: 2rem;
+  padding-bottom: 4rem;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -238,4 +293,42 @@ input::placeholder {
   font-weight: bold;
   color: #333;
   text-align: center;
+}
+
+.no-therapy-box {
+  border: 4px dashed #aaa;
+  padding: 30px;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  background-color: #fdfdfd;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.story-book {
+  color: rgb(238, 239, 243);
+  justify-content: center;
+  display: flex;
+  top: 40%;
+  margin-top: 3rem;
+}
+
+.story-book-container {
+  background: rgba(79, 111, 159, 0.8);
+  text-align: center;
+  display: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+  border-radius: 40px;
+  position: absolute;
+  top: 25%;
+  left: 10%;
+  box-shadow: 2px 2px 4px rgba(103, 103, 110, 0.5);
 }

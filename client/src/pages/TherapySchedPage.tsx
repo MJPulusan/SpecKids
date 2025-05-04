@@ -56,7 +56,9 @@ export function TherapySchedForm() {
 
         <div>
           {therapies.length === 0 ? (
-            <p>No therapy added yet.</p>
+            <div className="no-therapy-box">
+              <h3>No therapy added yet.</h3>
+            </div>
           ) : (
             <ul>
               {therapies.map((therapy) => (

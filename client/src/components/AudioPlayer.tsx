@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react';
 
 type AudioPlayerProps = {
   src: string;
-  isMuted?: boolean; // <-- make it optional
+  isMuted?: boolean;
+  repeat?: boolean;
 };
 
 export function AudioPlayer({ src, isMuted = false }: AudioPlayerProps) {

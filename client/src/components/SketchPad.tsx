@@ -48,22 +48,25 @@ export default function Sketch() {
         </div>
         <div className="navLinks">{/* Your nav links/buttons */}</div>
       </nav>
-
-      <CanvasDraw
-        ref={canvasRef}
-        brushColor="#000"
-        brushRadius={4}
-        lazyRadius={1}
-        canvasWidth={700}
-        // canvasWidth="90%"
-        canvasHeight={400}
-        hideGrid
-        className="canvas-style"
-      />
-      <button onClick={handleSave}>Save</button>
-      <button onClick={handleUndo}>Undo ↺</button>
-      <button onClick={handleErase}>Erase</button>
-      <button onClick={handleClose}>Close</button>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <CanvasDraw
+          ref={canvasRef}
+          brushColor="#000"
+          brushRadius={4}
+          lazyRadius={1}
+          canvasWidth={900}
+          // canvasWidth="90%"
+          canvasHeight={400}
+          hideGrid
+          className="canvas-style"
+        />
+      </div>
+      <div className="button-group">
+        <button onClick={handleSave}>Save</button>
+        <button onClick={handleUndo}>Undo ↺</button>
+        <button onClick={handleErase}>Erase</button>
+        <button onClick={handleClose}>Close</button>
+      </div>
       <AudioPlayer src="/sounds/CalmMusic01.mp3" />
     </div>
   );

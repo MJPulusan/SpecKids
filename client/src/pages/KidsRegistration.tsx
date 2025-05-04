@@ -76,7 +76,7 @@ export function KidsRegForm() {
           </div>
           {error && <p className="error-message">{error}</p>}
         </form>
-        <AudioPlayer src="/sounds/kidsRegistrationVoice.mp3" />
+        <AudioPlayer src="/sounds/KidsRegistrationVoice.mp3" />
       </div>
     </div>
   );
