@@ -7,26 +7,34 @@ import { SignInForm } from './pages/SignInPage.tsx';
 import { ScreenTimeForm } from './pages/ScreenTimePage';
 import { TherapySchedForm } from './pages/TherapySchedPage';
 import { SketchPage } from './pages/SketchPage';
+import { StoryBook } from './pages/StoryPage';
 import { HomePage } from './pages/HomeLogin';
 import KidsLayout from './components/KidsLayout';
+import { AudioPlayer } from './components/AudioPlayer'; // Add your player
 
 export default function App() {
   return (
-    <Routes>
-      {/* Parent routes */}
-      <Route path="/" element={<HomePage />} />
-      <Route path="/signin-form" element={<SignInForm />} />
-      <Route path="/parent-register" element={<ParentRegForm />} />
-      <Route path="/parents-main" element={<ParentsMain />} />
-      <Route path="/kids-register" element={<KidsRegForm />} />
-      <Route path="/set-screentime" element={<ScreenTimeForm />} />
-      <Route path="/set-therapy" element={<TherapySchedForm />} />
+    <>
+      {/* Background music that persists across routes */}
+      <AudioPlayer src="/sounds/background-music.mp3" repeat />
 
-      {/* Kid routes: wrap in TimerProvider */}
-      <Route path="/kids/*" element={<KidsLayout />}>
-        <Route path="kids-main" element={<KidsMain />} />
-        <Route path="sketchpad" element={<SketchPage />} />
-      </Route>
-    </Routes>
+      <Routes>
+        {/* Parent routes */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signin-form" element={<SignInForm />} />
+        <Route path="/parent-register" element={<ParentRegForm />} />
+        <Route path="/parents-main" element={<ParentsMain />} />
+        <Route path="/kids-register" element={<KidsRegForm />} />
+        <Route path="/set-screentime" element={<ScreenTimeForm />} />
+        <Route path="/set-therapy" element={<TherapySchedForm />} />
+
+        {/* Kid routes */}
+        <Route path="/kids/*" element={<KidsLayout />}>
+          <Route path="kids-main" element={<KidsMain />} />
+          <Route path="sketchpad" element={<SketchPage />} />
+          <Route path="storybook" element={<StoryBook />} />
+        </Route>
+      </Routes>
+    </>
   );
 }

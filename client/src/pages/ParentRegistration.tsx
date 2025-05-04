@@ -80,7 +80,7 @@ export function ParentRegForm() {
           </div>
           {error && <p className="error-message">{error}</p>}
         </form>
-        <AudioPlayer src="/sounds/fullParentRegistrationVoice.mp3" />
+        <AudioPlayer src="/sounds/ParentRegistrationVoice.mp3" />
       </div>
     </div>
   );
