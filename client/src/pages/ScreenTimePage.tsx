@@ -17,7 +17,6 @@ export function ScreenTimeForm() {
       if (!kidId) throw new Error('No kid selected');
 
       const existingLimit = await readTimeLimitByUserId(Number(kidId));
-      // console.log('submit', kidId, existingLimit);
 
       await updateTimeLimit({
         limitId: existingLimit?.limitId,

@@ -1,6 +1,5 @@
-// components/TherapyReminderProvider.tsx
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { readSchedulesByUserId, Schedule } from '../lib/data'; // ✅ adjust path if needed
+import { readSchedulesByUserId, Schedule } from '../lib/data';
 
 const TherapyReminderContext = createContext<{ schedules: Schedule[] }>({
   schedules: [],
@@ -25,10 +24,10 @@ export function TherapyReminderProvider({
       if (!selectedChildId) return;
       try {
         const result = await readSchedulesByUserId(selectedChildId);
-        console.log('📅 Fetched therapy schedules:', result);
+        console.log('Fetched therapy schedules:', result);
         setSchedules(result);
       } catch (err) {
-        console.error('❌ Failed to fetch schedules:', err);
+        console.error('Failed to fetch schedules:', err);
       }
     }
     fetchSchedules();
