@@ -7,7 +7,7 @@ export type UserEntry = {
 };
 
 export type Schedule = {
-  scheduleId?: number;
+  scheduleId: number;
   userId: number;
   therapyName: string;
   timeOfDay: string;
@@ -185,6 +185,25 @@ export async function readSchedulesByUserId(
   return res.json();
 }
 
+// export async function readSchedulesByUserId(
+//   userId: number
+// ): Promise<Schedule[]> {
+//   const now = new Date();
+//   now.setMinutes(now.getMinutes() + 2);
+//   const hour = now.getHours();
+//   const minute = now.getMinutes().toString().padStart(2, '0');
+
+//   return [
+//     {
+//       scheduleId: 999,
+//       userId,
+//       therapyName: 'Test Therapy',
+//       timeOfDay: `${hour}:${minute}`,
+//       daysOfWeek: new Date().toLocaleDateString('en-US', { weekday: 'short' }),
+//     },
+//   ];
+// }
+
 export async function addSchedule(schedule: {
   userId: number;
   therapyName: string;
@@ -209,6 +228,16 @@ export async function addSchedule(schedule: {
   }
 
   return res.json();
+}
+
+export async function removeSchedule(scheduleId: number): Promise<void> {
+  const res = await fetch(`/api/Schedules/${scheduleId}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  });
+  if (!res.ok) throw new Error('Failed to delete Therapy Schedule');
 }
 
 // *************** USER ENTRY *********************
@@ -319,16 +348,6 @@ export async function addSchedule(schedule: {
 //   });
 //   if (!res.ok) throw new Error('Failed to update Therapy Schedule');
 //   return res.json();
-// }
-
-// export async function removeSchedule(scheduleId: number): Promise<void> {
-//   const res = await fetch(`/api/Schedules/${scheduleId}`, {
-//     method: 'DELETE',
-//     headers: {
-//       Authorization: `Bearer ${readToken()}`,
-//     },
-//   });
-//   if (!res.ok) throw new Error('Failed to delete Therapy Schedule');
 // }
 
 // export async function removeTimeLimit(limitId: number): Promise<void> {

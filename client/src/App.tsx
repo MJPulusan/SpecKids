@@ -10,14 +10,10 @@ import { SketchPage } from './pages/SketchPage';
 import { StoryBook } from './pages/StoryPage';
 import { HomePage } from './pages/HomeLogin';
 import KidsLayout from './components/KidsLayout';
-import { AudioPlayer } from './components/AudioPlayer'; // Add your player
 
 export default function App() {
   return (
     <>
-      {/* Background music that persists across routes */}
-      <AudioPlayer src="/sounds/background-music.mp3" repeat />
-
       <Routes>
         {/* Parent routes */}
         <Route path="/" element={<HomePage />} />

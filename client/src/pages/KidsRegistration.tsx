@@ -47,8 +47,8 @@ export function KidsRegForm() {
 
   return (
     <div className="kids-reg-page">
+      <h1>Kids Registration</h1>
       <div className="form-container">
-        <h1>Kids Registration</h1>
         <form onSubmit={handleSubmit} className="kidsRegForm">
           {/* Loop through each field defined in the 'fields' array above. */}
           {fields.map((field) => (

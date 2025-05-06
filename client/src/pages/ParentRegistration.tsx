@@ -55,8 +55,8 @@ export function ParentRegForm() {
 
   return (
     <div className="parent-reg-page">
+      <h1>Register</h1>
       <div className="form-container">
-        <h1>Register</h1>
         <form onSubmit={handleSubmit} className="parentRegForm">
           {fields.map((field) => (
             <div key={field.name} className="form-field">

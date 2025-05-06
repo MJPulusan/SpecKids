@@ -36,52 +36,56 @@ export function ParentsMain() {
   }, []);
 
   return (
-    <div className="form-container">
-      <div className="header">
-        <h2>Welcome, {parentName}!</h2>
-        <button className="exitButton" onClick={() => navigate('/')}>
-          <img src="/images/close.png" alt="Close" className="closeIcon" />
-        </button>
-      </div>
+    <>
+      <h2>Welcome, {parentName}!</h2>
+      <div className="form-container">
+        <div className="header">
+          <div className="button-to-right">
+            <button className="exitButton" onClick={() => navigate('/')}>
+              <img src="/images/close.png" alt="Close" className="closeIcon" />
+            </button>
+          </div>
+        </div>
 
-      <div className="card">
-        <select
-          value={selectedChild}
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value === 'add') {
-              navigate('/kids-register');
-            } else {
-              setSelectedChild(Number(value));
-              localStorage.setItem('selectedChildId', value);
-            }
-          }}
-          className="childSelect">
-          <option value="" disabled hidden>
-            Select Child
-          </option>
-          {children.map((child) => (
-            <option key={child.userId} value={child.userId}>
-              {child.fullName}
+        <div className="card">
+          <select
+            value={selectedChild}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === 'add') {
+                navigate('/kids-register');
+              } else {
+                setSelectedChild(Number(value));
+                localStorage.setItem('selectedChildId', value);
+              }
+            }}
+            className="childSelect">
+            <option value="" disabled hidden>
+              Select Child
             </option>
-          ))}
-          <option value="add">+ Add New Child</option>
-        </select>
+            {children.map((child) => (
+              <option key={child.userId} value={child.userId}>
+                {child.fullName}
+              </option>
+            ))}
+            <option value="add">+ Add New Child</option>
+          </select>
 
-        <button
-          className="mainButton"
-          onClick={() => navigate('/set-screentime')}
-          disabled={!selectedChild}>
-          Set a Screentime
-        </button>
+          <button
+            className="mainButton"
+            onClick={() => navigate('/set-screentime')}
+            disabled={!selectedChild}>
+            Set a Screentime
+          </button>
 
-        <button
-          className="mainButton"
-          onClick={() => navigate('/set-therapy')}
-          disabled={!selectedChild}>
-          Set Therapy schedule
-        </button>
+          <button
+            className="mainButton"
+            onClick={() => navigate('/set-therapy')}
+            disabled={!selectedChild}>
+            Set Therapy schedule
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,0 +1,123 @@
+.therapy-form-container {
+  background: rgba(188, 186, 186, 0.7);
+  text-align: center;
+  display: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  height: 70%;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  border-radius: 40px;
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  box-shadow: 2px 2px 4px rgba(103, 103, 110, 0.5);
+}
+
+.therapy-layout {
+  display: flex;
+  gap: 1rem;
+  align-items: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* LEFT: Therapy List */
+.therapy-list-column {
+  flex: 1;
+  min-width: 280px;
+  margin-left: 2rem;
+}
+
+/* RIGHT: Form */
+.therapy-form-column {
+  flex: 1;
+  min-width: 300px;
+  margin-right: 2rem;
+}
+
+.therapy-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 75%;
+  overflow-y: auto;
+}
+
+.therapy-card {
+  flex: 1 1 100%;
+  min-width: 580px;
+  max-width: 100%;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  background-color: #f0f8ff;
+  border-radius: 8px;
+}
+
+@media (max-width <= 768px) {
+  .therapy-card {
+    min-width: 100%;
+  }
+}
+
+/* Optional: Narrower view for very small devices */
+@media (max-width <= 480px) {
+  .therapy-card {
+    padding: 0.75rem;
+    font-size: 0.95rem;
+  }
+}
+
+.delete-button {
+  font-size: small;
+  margin-top: 0.5rem;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.day-checkbox {
+  background: #f0f0f0;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.therapy-form {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.no-therapy-box {
+  border: 2px dashed #ccc;
+  padding: 1rem;
+  text-align: center;
+  color: #666;
+  border-radius: 12px;
+  background-color: #fafafa;
+}
+
+@media (width <= 768px) {
+  .therapy-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.add-therapy {
+  margin-bottom: 1.5rem;
+}

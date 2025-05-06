@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { readTimeLimitByUserId, updateTimeLimit } from '../lib/data';
-import { AudioPlayer } from '../components/AudioPlayer';
 
 export function ScreenTimeForm() {
   const navigate = useNavigate();
@@ -39,9 +38,9 @@ export function ScreenTimeForm() {
   }
 
   return (
-    <div className="screenTimePage">
+    <div className="screen-time-page">
+      <h2>Screen Time</h2>
       <div className="form-container">
-        <h2>Screen Time</h2>
         <form onSubmit={handleSubmit} className="screenTimeForm">
           <div className="inputRow">
             <div className="inputGroup">
@@ -63,7 +62,7 @@ export function ScreenTimeForm() {
               />
             </div>
           </div>
-          <div className="buttonRow">
+          <div className="button-group">
             <button type="submit" className="submitButton">
               Submit
             </button>
@@ -76,7 +75,6 @@ export function ScreenTimeForm() {
           </div>
           {error && <p className="error-message">{error}</p>}
         </form>
-        <AudioPlayer src="/sounds/background-music.mp3" repeat />
       </div>
     </div>
   );

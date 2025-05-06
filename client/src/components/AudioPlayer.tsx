@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type AudioPlayerProps = {
   src: string;
@@ -6,17 +6,26 @@ type AudioPlayerProps = {
   repeat?: boolean;
 };
 
-export function AudioPlayer({ src, isMuted = false }: AudioPlayerProps) {
+export function AudioPlayer({
+  src,
+  isMuted = false,
+  repeat = true,
+}: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [canPlay, setCanPlay] = useState(false);
 
   useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) {
+    if (canPlay && audioRef.current) {
+      const audio = audioRef.current;
       audio.muted = isMuted;
-      if (!audio.paused) return;
-      audio.play().catch(console.error);
+      audio.loop = repeat;
+      audio.play().catch(console.warn);
     }
-  }, [isMuted]);
+  }, [canPlay, isMuted, repeat]);
 
-  return <audio ref={audioRef} src={src} autoPlay />;
+  return (
+    <div onClick={() => setCanPlay(true)}>
+      <audio ref={audioRef} src={src} />
+    </div>
+  );
 }

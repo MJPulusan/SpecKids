@@ -1,8 +1,45 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { readUser } from '../lib/data';
+import { useEffect, useState } from 'react';
+import { TimerProvider, useTimer } from './TimerContext';
+import TimesUpModal from '../components/TimesUpModal';
+import { readUser, signIn } from '../lib/data';
 import '../KidsMain.css';
-import { TimerProvider } from './TimerContext';
+
+function ModalPrompt() {
+  const navigate = useNavigate();
+  const { timeUp, setTimeUp, parentAuthError, setParentAuthError } = useTimer();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleParentLogin(username: string, password: string) {
+    setIsLoading(true);
+    try {
+      const result = await signIn(username, password);
+
+      if (result.user.role !== 'parent') {
+        setParentAuthError('Only parent accounts can log in here.');
+        return;
+      }
+
+      setParentAuthError('');
+      setTimeUp(false);
+      navigate('/parents-main');
+    } catch (err) {
+      setParentAuthError('Login failed.');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  if (!timeUp) return null;
+
+  return (
+    <TimesUpModal onSubmit={handleParentLogin} error={parentAuthError}>
+      {isLoading && <p>Authenticating...</p>}
+    </TimesUpModal>
+  );
+}
 
 export default function KidsLayout() {
   const navigate = useNavigate();
@@ -15,12 +52,13 @@ export default function KidsLayout() {
   }, [user, navigate]);
 
   return (
-    <div>
+    <>
       {user && user.role === 'kid' && (
         <TimerProvider user={user}>
-          <Outlet /> {/* Renders nested kid routes */}
+          <ModalPrompt /> {/* Global modal prompt — always listening */}
+          <Outlet />
         </TimerProvider>
       )}
-    </div>
+    </>
   );
 }

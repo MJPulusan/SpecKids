@@ -7,38 +7,38 @@ body {
   background-position: center center;
   height: 100vh;
   margin: 0;
-  background-size: 40% auto;
+  background-size: 60% auto;
   animation: heartbeatBg 5s ease-in-out infinite;
 }
 
 @keyframes heartbeatBg {
   0%,
   100% {
-    background-size: 40% auto;
+    background-size: 60% auto;
   }
 
   20% {
-    background-size: 45% auto;
+    background-size: 65% auto;
   }
 
   40% {
-    background-size: 40% auto;
+    background-size: 60% auto;
   }
 
   60% {
-    background-size: 45% auto;
+    background-size: 65% auto;
   }
 
   80% {
-    background-size: 40% auto;
+    background-size: 60% auto;
   }
 }
 
 /* FOR MOBILE VIEW */
 @media (width <= 480px) {
   body {
-    background-size: 40vw;
-    background-position: top center;
+    background-size: 60vw;
+    background-position: center;
   }
 }
 
@@ -69,7 +69,6 @@ body {
   touch-action: none;
 }
 
-.login-container,
 .form-container {
   background: rgba(188, 186, 186, 0.7);
   text-align: center;
@@ -77,7 +76,8 @@ body {
   justify-content: center;
   align-items: center;
   width: 70%;
-  padding-top: 2rem;
+  height: 60%;
+  padding-top: 3rem;
   padding-bottom: 3rem;
   border-radius: 40px;
   position: absolute;
@@ -87,20 +87,36 @@ body {
 }
 
 .login-container {
+  background: rgba(188, 186, 186, 0.7);
+  text-align: center;
+  display: absolute;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1.5rem;
+  padding-bottom: 3rem;
+  border-radius: 40px;
+  position: absolute;
   top: 60%;
-  left: 25%;
-  width: 50%;
+  left: 18%;
+  width: 65%;
+  box-shadow: 2px 2px 4px rgba(103, 103, 110, 0.5);
 }
 
 .therapy-page {
   width: 100%;
 }
 
+.parent-reg-page,
+.kids-reg-page,
+.screen-time-page {
+  margin-top: 50px;
+}
+
 h2 {
-  text-align: left;
-  margin-bottom: 20px;
+  text-align: center;
   z-index: 1;
   position: relative;
+  margin-top: 50px;
 }
 
 p {
@@ -110,7 +126,7 @@ p {
   font-size: large;
 }
 
-.frontLogo {
+/* .frontLogo {
   z-index: 1000;
   display: flex;
   justify-content: center;
@@ -119,11 +135,11 @@ p {
   position: absolute;
   left: 42.5%;
   top: 52%;
-}
+} */
 
 .logo {
   max-width: 50%;
-  background-position: top center;
+  background-position: center;
   width: 1500px;
   animation: bounceIn 2s ease infinite;
   animation-fill-mode: forwards;
@@ -159,6 +175,7 @@ label {
 
 input[type='text'],
 input[type='password'],
+input[type='number'],
 .childSelect {
   font-size: large;
   width: 60%;
@@ -251,7 +268,7 @@ button:focus-visible {
 }
 
 .header {
-  display: flex;
+  display: flex-end;
   justify-content: center;
   position: relative;
   width: 100%;
@@ -265,6 +282,11 @@ button:focus-visible {
   font-weight: bold;
 }
 
+.header h2 {
+  justify-content: center;
+  display: flex;
+}
+
 input::placeholder {
   font-style: italic;
   color: gray;
@@ -275,21 +297,26 @@ input::placeholder {
   border: 0;
 }
 
-/* .circle {
+.circle {
   position: center;
-  width: 160px;
-  height: 160px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
-  border: 6px solid #ffcc00;
+  border: 6px solid #1ec6dc;
   background-color: #fffdf2;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-} */
+}
+
+.stopwatch {
+  display: flex;
+  justify-content: center;
+  margin-right: 20px;
+}
 
 .time {
-  font-size: 1.4rem;
   font-weight: bold;
   color: #333;
   text-align: center;
@@ -317,18 +344,94 @@ input::placeholder {
   margin-top: 3rem;
 }
 
+.button-to-right {
+  /* closeIcon */
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 35px;
+}
+
+.kids-logo {
+  width: 150px;
+}
+
+.kids-header {
+  display: flex;
+  position: relative;
+  justify-content: space-evenly;
+  gap: 20px;
+}
+
 .story-book-container {
-  background: rgba(79, 111, 159, 0.8);
   text-align: center;
-  display: absolute;
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 60%;
   padding-top: 2rem;
   padding-bottom: 3rem;
   border-radius: 40px;
   position: absolute;
   top: 25%;
-  left: 10%;
-  box-shadow: 2px 2px 4px rgba(103, 103, 110, 0.5);
+  left: 20%;
+  backdrop-filter: blur(5px);
+}
+
+.story-background {
+  background-image: url('/images/StorybookBg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #1e2a35;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.story-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* darker overlay */
+  z-index: 0;
+}
+
+.storybook-title {
+  font-size: 3rem;
+  color: #cacccf;
+  text-shadow: 2px 2px 4px #000, 0 0 10px #ffe066, 0 0 20px #ffa94d;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive;
+  animation: glow-pulse 2s infinite alternate;
+  position: absolute;
+  top: 10px;
+}
+
+@keyframes glow-pulse {
+  0% {
+    text-shadow: 2px 2px 4px #000, 0 0 10px #ffe066, 0 0 20px #ffa94d;
+  }
+
+  100% {
+    text-shadow: 2px 2px 6px #000, 0 0 20px #ffd43b, 0 0 30px #ff922b;
+  }
+}
+
+.therapy-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+}
+
+.therapy-card {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+  width: 30%;
 }

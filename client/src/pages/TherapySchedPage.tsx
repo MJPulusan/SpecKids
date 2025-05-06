@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { readSchedulesByUserId, addSchedule, Schedule } from '../lib/data';
+import {
+  readSchedulesByUserId,
+  addSchedule,
+  removeSchedule,
+  Schedule,
+} from '../lib/data';
+import '../TherapyPage.css';
 
 export function TherapySchedForm() {
   const navigate = useNavigate();
-  const selectedChildId = Number(localStorage.getItem('selectedChildId')); // the kidId selected
+  const selectedChildId = Number(localStorage.getItem('selectedChildId'));
   const [therapies, setTherapies] = useState<Schedule[]>([]);
   const [name, setName] = useState('');
   const [time, setTime] = useState('');
-  const [days, setDays] = useState('');
+  const [days, setDays] = useState<string[]>([]);
 
   useEffect(() => {
     if (!selectedChildId) return;
@@ -26,77 +32,124 @@ export function TherapySchedForm() {
   }, [selectedChildId]);
 
   async function handleAddTherapy() {
-    if (!selectedChildId || !name || !time || !days) return;
+    if (!selectedChildId || !name || !time || days.length === 0) return;
 
     try {
       const newEntry = await addSchedule({
         userId: selectedChildId,
         therapyName: name,
         timeOfDay: time,
-        daysOfWeek: days,
+        daysOfWeek: days.join(', '),
       });
 
       setTherapies([...therapies, newEntry]);
       setName('');
       setTime('');
-      setDays('');
+      setDays([]);
     } catch (err) {
       console.error('Error saving therapy schedule:', err);
     }
   }
 
-  function handleClose() {
-    navigate('/parents-main');
+  async function handleDelete(scheduleId: number | undefined) {
+    if (!scheduleId) return;
+
+    try {
+      await removeSchedule(scheduleId);
+      setTherapies((prev) => prev.filter((t) => t.scheduleId !== scheduleId));
+    } catch (err) {
+      console.error('Failed to delete schedule:', err);
+    }
   }
 
   return (
-    <div className="form-container">
-      <div className="therapy-page">
-        <h2>Therapy Schedules</h2>
+    <>
+      <h2>Therapy Schedules</h2>
+      <div className="therapy-form-container">
+        <div className="therapy-layout">
+          {/* LEFT: Therapy List */}
+          <div className="therapy-list-column">
+            {therapies.length === 0 ? (
+              <div className="no-therapy-box">
+                <h3>No therapy added yet.</h3>
+              </div>
+            ) : (
+              <ul className="therapy-list">
+                {therapies.map((therapy) => (
+                  <li key={therapy.scheduleId} className="therapy-card">
+                    <strong>{therapy.therapyName}</strong>
+                    <br />
+                    {therapy.daysOfWeek} – {therapy.timeOfDay}
+                    <br />
+                    <button
+                      onClick={() => handleDelete(therapy.scheduleId)}
+                      className="delete-button">
+                      Delete
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
-        <div>
-          {therapies.length === 0 ? (
-            <div className="no-therapy-box">
-              <h3>No therapy added yet.</h3>
+          {/* RIGHT: Therapy Form */}
+          <div className="therapy-form-column">
+            <div className="therapy-form">
+              <div className="button-to-right">
+                <button
+                  className="exitButton"
+                  onClick={() => navigate('/parents-main')}>
+                  <img
+                    src="/images/close.png"
+                    alt="Close"
+                    className="closeIcon"
+                  />
+                </button>
+              </div>
+
+              <label>Therapy Name:</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+
+              <label>Time:</label>
+              <input
+                type="text"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+              />
+
+              <label>Days:</label>
+              <div className="checkbox-group">
+                {['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat'].map(
+                  (day) => (
+                    <label key={day} className="day-checkbox">
+                      <input
+                        type="checkbox"
+                        value={day}
+                        checked={days.includes(day)}
+                        onChange={(e) => {
+                          const updated = e.target.checked
+                            ? [...days, day]
+                            : days.filter((d) => d !== day);
+                          setDays(updated);
+                        }}
+                      />
+                      {day}
+                    </label>
+                  )
+                )}
+              </div>
+
+              <button onClick={handleAddTherapy} className="add-therapy">
+                Add Therapy
+              </button>
             </div>
-          ) : (
-            <ul>
-              {therapies.map((therapy) => (
-                <li key={therapy.scheduleId}>
-                  <strong>{therapy.therapyName}</strong> - {therapy.daysOfWeek}{' '}
-                  - {therapy.timeOfDay}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div>
-          <label>Therapy Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <label>Time:</label>
-          <input
-            type="text"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-          />
-          <label>Days:</label>
-          <input
-            type="text"
-            value={days}
-            onChange={(e) => setDays(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <button onClick={handleAddTherapy}>Add Therapy</button>
-          <button onClick={handleClose}>Close</button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

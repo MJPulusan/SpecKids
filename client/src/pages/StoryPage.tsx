@@ -3,14 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import '../App.css';
 
 const storyPages = [
-  // 'Once upon a time, in a land full of colors, lived a happy blue bunny named Benny.',
-  // 'Benny loved to bounce through the rainbow fields and nibble on crunchy carrots.',
-  // 'One day, Benny met a shy turtle named Tilly who needed help crossing the stream.',
-  // 'Together, they built a leafy bridge and became best friends forever!',
-  'I love the mountains, I love the rolling hills',
-  'I love the flowers, I love the daffodils!',
-  'I love the fireside, When all the lights are low',
-  'Boom-dee-yaa-da, Boom-dee-yaa-da, Boom-dee-yaa-da, Boom-dee-yaa-da...',
+  'Once upon a time, in a land full of colors, lived a happy blue bunny named Matty.',
+  'Matty loved to bounce through the rainbow fields and nibble on crunchy carrots.',
+  'One day, Matty met a shy turtle named Mikey who needed help crossing the stream.',
+  'Together, they built a leafy bridge and became best friends forever!',
 ];
 
 export function StoryBook() {
@@ -18,7 +14,17 @@ export function StoryBook() {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const navigate = useNavigate();
 
-  // Load voices
+  // Stop Background music first.
+  useEffect(() => {
+    const audio = document.querySelector('audio');
+    audio?.pause();
+
+    return () => {
+      audio?.play().catch(console.warn); // resume when leaving
+    };
+  }, []);
+
+  // Now Load kid voice.
   useEffect(() => {
     const synth = window.speechSynthesis;
     const loadVoices = () => setVoices(synth.getVoices());
@@ -71,24 +77,26 @@ export function StoryBook() {
   }
 
   return (
-    <div>
+    <div className="story-background">
+      <h1 className="storybook-title">Matty's Adventure</h1>
       <div>
-        <h1>📖 Benny's Adventure</h1>
         <div className="story-book-container">
-          <button
-            onClick={() => {
-              speechSynthesis.cancel(); // Stop speech on close
-              navigate('/kids/kids-main');
-            }}>
-            <img src="/images/close.png" alt="Close" className="closeIcon" />
-          </button>
+          <div className="button-to-right">
+            <button
+              className="exitButton"
+              onClick={() => {
+                speechSynthesis.cancel();
+                navigate('/kids/kids-main');
+              }}>
+              <img src="/images/close.png" alt="Close" className="closeIcon" />
+            </button>
+          </div>
           <h1 className="story-book">{storyPages[page]}</h1>
 
           <div className="button-group">
             <button disabled={page === 0} onClick={handleBack}>
               ⬅️ Back
             </button>
-
             <button
               disabled={page === storyPages.length - 1}
               onClick={handleNext}>

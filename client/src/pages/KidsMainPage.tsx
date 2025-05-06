@@ -48,6 +48,10 @@ export function KidsMain() {
     }
   }
 
+  function handleExit() {
+    setTimeUp(true); // trigger the modal instead of navigating
+  }
+
   return (
     <div className="kids-main-container">
       {timeUp && (
@@ -56,20 +60,21 @@ export function KidsMain() {
 
       <header className="kids-header">
         <img src="/images/logo.png" alt="SpecKids Logo" className="kids-logo" />
-        <h1>Hello, {user.fullName || 'Kid'}!</h1>
-      </header>
-      <button className="exit-button" onClick={() => setTimeUp(true)}>
-        <img src="/images/close.png" alt="Close" className="closeIcon" />
-      </button>
 
-      <div className="stopwatch">
-        <div className="circle">
-          <span className="time">
-            {hours}h {minutes}m {seconds.toString().padStart(2, '0')}s
-          </span>
+        <div className="stopwatch">
+          <div className="circle">
+            <span className="time">
+              {hours}h {minutes}m {seconds.toString().padStart(2, '0')}s
+            </span>
+          </div>
         </div>
-      </div>
-
+        <div className="button-to-right">
+          <button className="exitButton" onClick={handleExit}>
+            <img src="/images/close.png" alt="Close" className="closeIcon" />
+          </button>
+        </div>
+      </header>
+      <h1>Hello, {user.fullName || 'Kid'}!</h1>
       <div className="activity-grid">
         <div
           className="activity-card"

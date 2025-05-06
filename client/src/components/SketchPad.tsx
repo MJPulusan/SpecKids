@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AudioPlayer } from '../components/AudioPlayer';
+
 import CanvasDraw from 'react-canvas-draw';
 
 export default function Sketch() {
@@ -67,7 +67,6 @@ export default function Sketch() {
         <button onClick={handleErase}>Erase</button>
         <button onClick={handleClose}>Close</button>
       </div>
-      <AudioPlayer src="/sounds/CalmMusic01.mp3" />
     </div>
   );
 }
