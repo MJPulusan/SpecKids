@@ -16,25 +16,23 @@ export function SignInForm() {
     try {
       const { user, token } = await signIn(username, password);
 
-      saveAuth(user, token); // your saveAuth() function stores in localStorage
+      saveAuth(user, token);
       navigate(user.role === 'parent' ? '/parents-main' : '/kids/kids-main');
     } catch (err) {
       setError('Login failed. Please check your username and password.');
     }
   }
 
-  function handleExit() {
-    navigate('/');
-  }
-
   return (
     <div className="sign-in-page">
+      <h2>Login</h2>
       <div className="form-container">
         <div className="sign-in-header">
-          <h2>Login</h2>
-          <button className="exitButton" onClick={handleExit}>
-            <img src="/images/close.png" alt="Close" className="closeIcon" />
-          </button>
+          <div className="button-to-right">
+            <button className="exitButton" onClick={() => navigate('/')}>
+              <img src="/images/close.png" alt="Close" className="closeIcon" />
+            </button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="signInForm">

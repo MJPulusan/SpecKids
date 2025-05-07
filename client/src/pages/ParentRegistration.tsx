@@ -20,7 +20,6 @@ export function ParentRegForm() {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [event.target.name]: event.target.value });
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const { fullName, username, password } = form;
@@ -55,8 +54,8 @@ export function ParentRegForm() {
 
   return (
     <div className="parent-reg-page">
+      <h1>Register</h1>
       <div className="form-container">
-        <h1>Register</h1>
         <form onSubmit={handleSubmit} className="parentRegForm">
           {fields.map((field) => (
             <div key={field.name} className="form-field">
@@ -80,8 +79,8 @@ export function ParentRegForm() {
           </div>
           {error && <p className="error-message">{error}</p>}
         </form>
-        <AudioPlayer src="/sounds/ParentRegistrationVoice.mp3" />
       </div>
+      <AudioPlayer src="/sounds/ParentRegistrationVoice.mp3" />
     </div>
   );
 }

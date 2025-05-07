@@ -1,8 +1,10 @@
 import './TimesUpModal.css';
+import React from 'react';
 
 type Props = {
   onSubmit: (username: string, password: string) => void;
   error?: string;
+  children?: React.ReactNode;
 };
 
 export default function TimesUpModal({ onSubmit, error }: Props) {
@@ -22,6 +24,8 @@ export default function TimesUpModal({ onSubmit, error }: Props) {
           alt="Time's Up"
           className="times-up-img"
         />
+        <h1>Thank you for using SpecKids!</h1>
+
         <form onSubmit={handleSubmit} className="parent-login-form">
           <input name="username" type="text" placeholder="Username" required />
           <input

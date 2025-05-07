@@ -221,6 +221,31 @@ app.post('/api/Schedules', authMiddleware, async (req, res, next) => {
   }
 });
 
+// Update Schedules
+app.put('/api/Schedules/:scheduleId', async (req, res, next) => {
+  try {
+    const { scheduleId } = req.params;
+    const { therapyName, timeOfDay, daysOfWeek } = req.body;
+    const sql = `
+      UPDATE "Schedules"
+      SET "therapyName" = $1,
+          "timeOfDay" = $2,
+          "daysOfWeek" = $3
+      WHERE "scheduleId" = $4
+      RETURNING *;
+    `;
+    const result = await db.query(sql, [
+      therapyName,
+      timeOfDay,
+      daysOfWeek,
+      scheduleId,
+    ]);
+    res.json(result.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.delete('/api/Schedules/:scheduleId', async (req, res, next) => {
   try {
     const scheduleId = Number(req.params.scheduleId);
