@@ -9,10 +9,10 @@ type AudioPlayerProps = {
 export function AudioPlayer({
   src,
   isMuted = false,
-  repeat = true,
+  repeat = false,
 }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [canPlay, setCanPlay] = useState(false);
+  const [canPlay, setCanPlay] = useState(true);
 
   useEffect(() => {
     if (canPlay && audioRef.current) {

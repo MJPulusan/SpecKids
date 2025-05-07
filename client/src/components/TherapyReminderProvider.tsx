@@ -47,7 +47,7 @@ export function TherapyReminderProvider({
 
         const [hourStr, minuteStr] = sched.timeOfDay.split(':');
         const hour = Number(hourStr);
-        const minute = Number(minuteStr.slice(0, 2));
+        const minute = Number(minuteStr.slice(0, 2)); //AM or PM
         const scheduleTime = hour * 60 + minute;
         const alertTime = scheduleTime - 30;
 

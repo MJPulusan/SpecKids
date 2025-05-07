@@ -4,6 +4,7 @@ import {
   readSchedulesByUserId,
   addSchedule,
   removeSchedule,
+  updateSchedule,
   Schedule,
 } from '../lib/data';
 import '../TherapyPage.css';
@@ -15,6 +16,7 @@ export function TherapySchedForm() {
   const [name, setName] = useState('');
   const [time, setTime] = useState('');
   const [days, setDays] = useState<string[]>([]);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!selectedChildId) return;
@@ -35,20 +37,44 @@ export function TherapySchedForm() {
     if (!selectedChildId || !name || !time || days.length === 0) return;
 
     try {
-      const newEntry = await addSchedule({
-        userId: selectedChildId,
-        therapyName: name,
-        timeOfDay: time,
-        daysOfWeek: days.join(', '),
-      });
+      if (editingId) {
+        const updated = await updateSchedule({
+          scheduleId: editingId,
+          userId: selectedChildId,
+          therapyName: name,
+          timeOfDay: time,
+          daysOfWeek: days.join(', '),
+        });
 
-      setTherapies([...therapies, newEntry]);
+        setTherapies((prev) =>
+          prev.map((t) => (t.scheduleId === editingId ? updated : t))
+        );
+        setEditingId(null);
+      } else {
+        const newEntry = await addSchedule({
+          userId: selectedChildId,
+          therapyName: name,
+          timeOfDay: time,
+          daysOfWeek: days.join(', '),
+        });
+
+        setTherapies([...therapies, newEntry]);
+      }
+
+      // Reset form
       setName('');
       setTime('');
       setDays([]);
     } catch (err) {
       console.error('Error saving therapy schedule:', err);
     }
+  }
+
+  function handleEdit(therapy: Schedule) {
+    setEditingId(therapy.scheduleId ?? null);
+    setName(therapy.therapyName);
+    setTime(therapy.timeOfDay);
+    setDays(therapy.daysOfWeek.split(', ').map((d) => d.trim()));
   }
 
   async function handleDelete(scheduleId: number | undefined) {
@@ -81,6 +107,11 @@ export function TherapySchedForm() {
                     <br />
                     {therapy.daysOfWeek} – {therapy.timeOfDay}
                     <br />
+                    <button
+                      onClick={() => handleEdit(therapy)}
+                      className="edit-button">
+                      Edit
+                    </button>
                     <button
                       onClick={() => handleDelete(therapy.scheduleId)}
                       className="delete-button">

@@ -69,15 +69,20 @@
   }
 }
 
-.delete-button {
+.delete-button,
+.edit-button {
   font-size: small;
   margin-top: 0.5rem;
-  background-color: #ff4d4f;
+  background-color: #e42d15;
   color: white;
   border: none;
   padding: 0.3rem 0.6rem;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.edit-button {
+  background-color: #728cd3;
 }
 
 .checkbox-group {
@@ -107,7 +112,7 @@
   padding: 1rem;
   text-align: center;
   color: #666;
-  border-radius: 12px;
+  border-radius: 20px;
   background-color: #fafafa;
 }
 

@@ -20,22 +20,14 @@ h1 {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
-/* .stopwatch .circle {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: #dfefff;
-  border: 8px solid #4a90e2;
-  margin: 0 auto 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-} */
-
 .stopwatch .time {
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
+}
+
+.stopwatch {
+  margin-right: 20px;
 }
 
 .activity-grid {
