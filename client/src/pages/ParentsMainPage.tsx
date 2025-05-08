@@ -13,7 +13,7 @@ export function ParentsMain() {
   useEffect(() => {
     const user = readUser();
     if (user && user.role === 'parent') {
-      setParentName(user.fullName);
+      setParentName(user.fullName); // Display the Parent logged in
     }
 
     async function fetchChildren() {

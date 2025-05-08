@@ -38,20 +38,13 @@ body {
 @media (width <= 480px) {
   body {
     background-size: 60vw;
-    background-position: center;
+    background-position: center center;
   }
 }
 
 .homepage-background {
   background-color: #fdf3e2;
   min-height: 100vh;
-}
-
-@media (width <= 480px) {
-  .logo {
-    background-size: 60vw;
-    background-position: center;
-  }
 }
 
 #root {
@@ -126,21 +119,14 @@ p {
   font-size: large;
 }
 
-/* .frontLogo {
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  color: #66420b;
-  line-height: 0;
-  position: absolute;
-  left: 42.5%;
-  top: 52%;
-} */
-
 .logo {
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+  width: auto;
+  height: auto;
   max-width: 50%;
   background-position: center;
-  width: 1500px;
   animation: bounceIn 2s ease infinite;
   animation-fill-mode: forwards;
 }
@@ -163,6 +149,13 @@ p {
   }
 }
 
+@media (width <= 480px) {
+  .logo-header {
+    background-size: 60vw;
+    margin-top: 50%;
+  }
+}
+
 label {
   display: block;
   font-size: x-large;
@@ -176,6 +169,7 @@ label {
 input[type='text'],
 input[type='password'],
 input[type='number'],
+input[type='time'],
 .childSelect {
   font-size: large;
   width: 60%;
@@ -402,7 +396,7 @@ input::placeholder {
   font-size: 3rem;
   color: #cacccf;
   text-shadow: 2px 2px 4px #000, 0 0 10px #ffe066, 0 0 20px #ffa94d;
-  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   animation: glow-pulse 2s infinite alternate;
   position: absolute;
   top: 10px;
@@ -434,4 +428,23 @@ input::placeholder {
   color: #333;
   text-align: center;
   width: 30%;
+}
+
+.sketch-button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  height: 50px;
+  flex-wrap: wrap;
+}
+
+@media (width <= 480px) {
+  .sketch-button-group {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+    margin-left: 5px;
+    justify-items: center;
+  }
 }

@@ -51,7 +51,7 @@ export function readToken(): string | undefined {
   return (JSON.parse(auth) as Auth).token;
 }
 
-// *************** SIGN-IN (WORKING) *********************
+// *************** SIGN-IN *********************
 
 export async function signIn(
   username: string,
@@ -185,7 +185,7 @@ export async function readSchedulesByUserId(
   return res.json();
 }
 
-export async function addSchedule(schedule: {
+export async function createSchedule(schedule: {
   userId: number;
   therapyName: string;
   timeOfDay: string;
@@ -193,7 +193,7 @@ export async function addSchedule(schedule: {
 }): Promise<Schedule> {
   const token = readToken();
 
-  const res = await fetch('/api/schedules', {
+  const res = await fetch('/api/Schedules', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -211,7 +211,7 @@ export async function addSchedule(schedule: {
   return res.json();
 }
 
-export async function updateSchedule(schedule: Schedule): Promise<Schedule> {
+export async function editSchedule(schedule: Schedule): Promise<Schedule> {
   const res = await fetch(`/api/Schedules/${schedule.scheduleId}`, {
     method: 'PUT',
     headers: {
@@ -224,7 +224,7 @@ export async function updateSchedule(schedule: Schedule): Promise<Schedule> {
   return res.json();
 }
 
-export async function removeSchedule(scheduleId: number): Promise<void> {
+export async function deleteSchedule(scheduleId: number): Promise<void> {
   const res = await fetch(`/api/Schedules/${scheduleId}`, {
     method: 'DELETE',
     headers: {

@@ -1,8 +1,8 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { TimerProvider, useTimer } from './TimerContext';
-import TimesUpModal from '../components/TimesUpModal';
 import { readUser, signIn } from '../lib/data';
+import TimesUpModal from '../components/TimesUpModal';
 import '../KidsMain.css';
 
 function ModalPrompt() {
@@ -55,7 +55,7 @@ export default function KidsLayout() {
     <>
       {user && user.role === 'kid' && (
         <TimerProvider user={user}>
-          <ModalPrompt /> {/* Global modal prompt — always listening */}
+          <ModalPrompt /> {/* Global modal prompt */}
           <Outlet />
         </TimerProvider>
       )}

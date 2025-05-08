@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import CanvasDraw from 'react-canvas-draw';
 
 export default function Sketch() {
@@ -43,10 +42,7 @@ export default function Sketch() {
   return (
     <div className="flex justify-center p-4">
       <nav className="navbar">
-        <div className="logoContainer">
-          {/* Optional additional elements */}
-        </div>
-        <div className="navLinks">{/* Your nav links/buttons */}</div>
+        <div className="logoContainer"></div>
       </nav>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <CanvasDraw
@@ -54,14 +50,13 @@ export default function Sketch() {
           brushColor="#000"
           brushRadius={4}
           lazyRadius={1}
-          canvasWidth={900}
-          // canvasWidth="90%"
+          canvasWidth={700}
           canvasHeight={400}
           hideGrid
           className="canvas-style"
         />
       </div>
-      <div className="button-group">
+      <div className="sketch-button-group">
         <button onClick={handleSave}>Save</button>
         <button onClick={handleUndo}>Undo ↺</button>
         <button onClick={handleErase}>Erase</button>

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
+// background-music
 const MusicContext = createContext<{
   hasInteracted: boolean;
   setHasInteracted: (val: boolean) => void;
@@ -20,7 +21,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
     if (hasInteracted && audioRef.current) {
       audioRef.current.play().catch(console.warn);
     }
-  }, [hasInteracted]);
+  }, [hasInteracted]); // when a button is clicked (sign in | sign up)
 
   return (
     <MusicContext.Provider value={{ hasInteracted, setHasInteracted }}>

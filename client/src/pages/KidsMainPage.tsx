@@ -86,7 +86,7 @@ export function KidsMain() {
         <div
           className="activity-card"
           onClick={() => navigate('/kids/storybook')}>
-          <img src="/images/guess_color_game.png" alt="Story book" />
+          <img src="/images/storybook-icon.png" alt="Story book" />
           <p>Story Page</p>
         </div>
       </div>

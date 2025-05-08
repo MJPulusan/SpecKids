@@ -162,20 +162,6 @@ app.put('/api/Users/:userId', authMiddleware, async (req, res, next) => {
   }
 });
 
-app.delete('/api/Users/:userId', authMiddleware, async (req, res, next) => {
-  try {
-    const { userId } = req.params;
-    if (!Number(userId)) throw new ClientError(400, 'Invalid userId');
-
-    const sql = 'DELETE FROM "Users" WHERE "userId" = $1 RETURNING *';
-    const result = await db.query(sql, [userId]);
-    if (!result.rows[0]) throw new ClientError(404, 'User not found');
-    res.sendStatus(204);
-  } catch (err) {
-    next(err);
-  }
-});
-
 // ---------- SCHEDULES ----------
 
 // GET all therapies for a user

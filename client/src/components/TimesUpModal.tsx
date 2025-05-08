@@ -1,4 +1,4 @@
-import './TimesUpModal.css';
+import '../TimesUpModal.css';
 import React from 'react';
 
 type Props = {

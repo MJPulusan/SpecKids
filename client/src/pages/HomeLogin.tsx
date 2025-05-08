@@ -7,7 +7,9 @@ export function HomePage() {
 
   return (
     <div className="homepage-background">
-      <img src="/images/logo.png" alt="SpecKids Logo" className="logo" />
+      <div className="logo-header">
+        <img src="/images/logo.png" alt="SpecKids Logo" className="logo" />
+      </div>
       <div className="login-container">
         <div className="button-group">
           <button
