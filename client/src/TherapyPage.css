@@ -29,18 +29,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%; /* or set a fixed height if needed */
+  height: 100%;
   padding-top: 10px;
 }
 
-.no-therapy-box,
-.therapy-list {
+.no-therapy-box {
   border: 2px dashed #ccc;
   padding: 20px;
   text-align: center;
   color: #666;
   border-radius: 20px;
   background-color: #fafafa;
+}
+
+.therapy-list {
+  border: 2px #ccc;
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  border-radius: 20px;
 }
 
 @media (max-width <= 768px) {
@@ -58,8 +65,8 @@
 /* RIGHT: Form */
 .therapy-form-column {
   display: flex;
-  justify-content: center; /* center horizontally */
-  align-items: center; /* center vertically */
+  justify-content: center;
+  align-items: center;
   height: 100%;
   padding: 1rem;
 }
@@ -91,7 +98,7 @@
   }
 }
 
-/* Optional: Narrower view for very small devices */
+/* mobile view */
 @media (max-width <= 480px) {
   .therapy-card {
     padding: 0.75rem;

@@ -107,6 +107,7 @@ export async function registerKid(
   }
 }
 
+//display kids
 export async function readKidEntries(): Promise<UserEntry[]> {
   const res = await fetch('/api/Users/kids', {
     headers: {
