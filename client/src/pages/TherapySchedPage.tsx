@@ -1,70 +1,46 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  readSchedulesByUserId,
-  addSchedule,
-  removeSchedule,
-  updateSchedule,
-  Schedule,
-} from '../lib/data';
+import { useTherapyReminder } from '../components/TherapyReminderProvider';
+import { Schedule } from '../lib/data';
 import '../TherapyPage.css';
 
 export function TherapySchedForm() {
   const navigate = useNavigate();
   const selectedChildId = Number(localStorage.getItem('selectedChildId'));
-  const [therapies, setTherapies] = useState<Schedule[]>([]);
+
+  const { schedules, addSchedule, updateSchedule, removeSchedule } =
+    useTherapyReminder();
+
   const [name, setName] = useState('');
   const [time, setTime] = useState('');
   const [days, setDays] = useState<string[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (!selectedChildId) return;
-
-    async function load() {
-      try {
-        const result = await readSchedulesByUserId(selectedChildId);
-        setTherapies(result);
-      } catch (err) {
-        console.error('Failed to load therapy schedules:', err);
-      }
-    }
-
-    load();
-  }, [selectedChildId]);
+  function resetForm() {
+    setName('');
+    setTime('');
+    setDays([]);
+    setEditingId(null);
+  }
 
   async function handleAddTherapy() {
     if (!selectedChildId || !name || !time || days.length === 0) return;
 
+    const scheduleData: Schedule = {
+      scheduleId: editingId ?? 0,
+      userId: selectedChildId,
+      therapyName: name,
+      timeOfDay: time,
+      daysOfWeek: days.join(', '),
+    };
+
     try {
       if (editingId) {
-        const updated = await updateSchedule({
-          scheduleId: editingId,
-          userId: selectedChildId,
-          therapyName: name,
-          timeOfDay: time,
-          daysOfWeek: days.join(', '),
-        });
-
-        setTherapies((prev) =>
-          prev.map((t) => (t.scheduleId === editingId ? updated : t))
-        );
-        setEditingId(null);
+        await updateSchedule(scheduleData);
       } else {
-        const newEntry = await addSchedule({
-          userId: selectedChildId,
-          therapyName: name,
-          timeOfDay: time,
-          daysOfWeek: days.join(', '),
-        });
-
-        setTherapies([...therapies, newEntry]);
+        await addSchedule(scheduleData);
       }
-
-      // Reset form
-      setName('');
-      setTime('');
-      setDays([]);
+      resetForm();
     } catch (err) {
       console.error('Error saving therapy schedule:', err);
     }
@@ -81,8 +57,7 @@ export function TherapySchedForm() {
     if (!scheduleId) return;
 
     try {
-      await removeSchedule(scheduleId);
-      setTherapies((prev) => prev.filter((t) => t.scheduleId !== scheduleId));
+      await removeSchedule({ scheduleId } as Schedule);
     } catch (err) {
       console.error('Failed to delete schedule:', err);
     }
@@ -95,17 +70,17 @@ export function TherapySchedForm() {
         <div className="therapy-layout">
           {/* LEFT: Therapy List */}
           <div className="therapy-list-column">
-            {therapies.length === 0 ? (
+            {schedules.length === 0 ? (
               <div className="no-therapy-box">
                 <h3>No therapy added yet.</h3>
               </div>
             ) : (
               <ul className="therapy-list">
-                {therapies.map((therapy) => (
+                {schedules.map((therapy) => (
                   <li key={therapy.scheduleId} className="therapy-card">
                     <strong>{therapy.therapyName}</strong>
                     <br />
-                    {therapy.daysOfWeek} – {therapy.timeOfDay}
+                    {therapy.daysOfWeek} - {therapy.timeOfDay}
                     <br />
                     <button
                       onClick={() => handleEdit(therapy)}
@@ -147,14 +122,14 @@ export function TherapySchedForm() {
 
               <label>Time:</label>
               <input
-                type="text"
+                type="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
               />
 
               <label>Days:</label>
               <div className="checkbox-group">
-                {['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat'].map(
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(
                   (day) => (
                     <label key={day} className="day-checkbox">
                       <input
@@ -175,7 +150,7 @@ export function TherapySchedForm() {
               </div>
 
               <button onClick={handleAddTherapy} className="add-therapy">
-                Add Therapy
+                {editingId ? 'Update Therapy' : 'Add Therapy'}
               </button>
             </div>
           </div>

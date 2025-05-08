@@ -1,0 +1,80 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(32, 33, 34, 0.6);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #4d7596;
+  padding: 100px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+@media (max-width <= 480px) {
+  .modal-content {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+}
+
+.modal-content h2 {
+  color: #9beaec;
+  font-size: 30px;
+  margin-bottom: 1rem;
+}
+
+.modal-content p {
+  font-size: 1.2rem;
+  color: #f7f4f3;
+}
+
+span {
+  color: rgb(233, 175, 16);
+  font-size: x-large;
+}
+
+.therapyReminder-img {
+  width: 200px;
+  margin-top: 1rem;
+  border-radius: 20px;
+}
+
+.modal-content button {
+  margin-top: 1.5rem;
+  padding: 0.8rem 2rem;
+  font-size: 16px;
+  background-color: #00bcd4;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+  transition: 0.3s ease;
+}
+
+.modal-content button:hover {
+  background-color: #e67628;
+  transform: scale(1.05);
+}
+
+/* Optional bounce animation */
+@keyframes popup-bounce {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

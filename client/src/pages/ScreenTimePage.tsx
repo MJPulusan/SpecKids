@@ -1,3 +1,6 @@
+// This feature allows a parent/guardian to limit how long a child can use the app.
+// When the time is up, a modal appears saying “Time’s up!” and optionally prompts for a parent override.
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { readTimeLimitByUserId, updateTimeLimit } from '../lib/data';
