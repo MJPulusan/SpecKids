@@ -6,12 +6,16 @@ import { AudioPlayer } from '../components/AudioPlayer';
 export function ParentRegForm() {
   const navigate = useNavigate();
   const [error, setError] = useState<string | undefined>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // tracks if the form is currently being submitted.
+
+  //sets up form for 3 fields
   const [form, setForm] = useState({
     fullName: '',
     username: '',
     password: '',
   });
+
+  //a config array used to render form fields dynamically in JSX.
   const fields = [
     { name: 'fullName', label: 'Parent Name / Guardian:', type: 'text' },
     { name: 'username', label: 'Username:', type: 'text' },
@@ -19,11 +23,13 @@ export function ParentRegForm() {
   ];
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    // this updates form state without overwriting the other fields.
     setForm({ ...form, [event.target.name]: event.target.value });
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const { fullName, username, password } = form;
-    setIsSubmitting(true);
+    setIsSubmitting(true); //update state to true
     setError(undefined);
 
     try {

@@ -53,6 +53,11 @@
   cursor: pointer;
 }
 
+.parent-login-form button:hover {
+  background-color: #e67628;
+  transform: scale(1.05);
+}
+
 span {
   font: 30px;
 }

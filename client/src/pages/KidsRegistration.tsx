@@ -7,12 +7,15 @@ export function KidsRegForm() {
   const navigate = useNavigate();
   const [error, setError] = useState<string | undefined>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // sets up form for 3 fields (kids)
   const [form, setForm] = useState({
-    fullName: '', // Kid's name
+    fullName: '',
     username: '',
     password: '',
   });
 
+  //a config array used to render form fields dynamically in JSX.
   const fields = [
     { name: 'fullName', label: "Kid's Name:", type: 'text' },
     { name: 'username', label: 'Username:', type: 'text' },
@@ -20,6 +23,7 @@ export function KidsRegForm() {
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    // this updates form state without overwriting the other fields.
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (event: React.FormEvent) => {

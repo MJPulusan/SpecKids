@@ -99,8 +99,6 @@ export function TherapyReminderProvider({
 
         // Only show the modal if it's exactly 30 minutes before, and it haven’t shown up yet
         if (!shownRef.current.has(id) && minutesBefore === 30 && !modalData) {
-          console.log('Triggering modal for:', sched.therapyName);
-
           setModalData({
             therapyName: sched.therapyName,
             timeOfDay: sched.timeOfDay,
