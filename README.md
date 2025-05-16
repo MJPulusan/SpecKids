@@ -29,6 +29,49 @@ SpecKids is a full-stack web application designed to support children with spect
 * Continues background music with a kid instruction voice during registration.
 * Friendly UI for desktop and mobile with accessible, calming visuals for spectrum needs.
 
-**Link**
+
+
+**Getting Started**
+--
+
+**1. Clone the repository**
+
+- _git clone https://github.com/your-username/speckids.git_<br>
+- _cd speckids_
+
+
+**2. Install dependencies**
+
+- _npm install_
+
+
+**3. Setup your environment**
+Create a .env file and add your PostgreSQL connection string and JWT secret:
+
+- _DATABASE_URL=your_postgres_url_
+- _JWT_SECRET=your_secret_key_
+
+
+**4. Run the server**
+
+- _npm run dev_
+
+
+**5. Start the frontend (if separate)**
+
+- _npm run start_
+
+
+
+**Developer**
+--
+
+**Michael John Pulusan**<br>
+Full Stack Developer<br>
+[LinkedIn](www.linkedin.com/in/michael-john-pulusan) | [GitHub](https://github.com/MJPulusan)
+
+
+
+**Link to App**
 --
 [SpecKids](http://ec2-3-143-194-76.us-east-2.compute.amazonaws.com/)
