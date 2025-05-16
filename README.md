@@ -3,7 +3,9 @@
 
 SpecKids is a full-stack web application designed to support children with spectrum conditions by providing interactive, parent-managed activities and time-controlled screen sessions. Developed as a capstone project, it blends accessibility, structure, and fun to create a safe digital environment for kids.
 
-![Login](https://github.com/user-attachments/assets/1e5ad172-902c-4fec-ade3-ececd1233b7e)
+![Desktop Main Page](https://github.com/user-attachments/assets/e2285883-aecf-42c7-8427-0482f729370e)
+![Mobile display](https://github.com/user-attachments/assets/2624b763-384b-4ac0-ada8-a5cc9aa44926)
+
 
 
 **Stack**
