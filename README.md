@@ -38,7 +38,7 @@ SpecKids is a full-stack web application designed to support children with spect
 
 **1. Clone the repository**
 
-- _git clone https://github.com/your-username/speckids.git_<br>
+- _git clone [https://github.com/your-username/speckids.git](https://github.com/MJPulusan/SpecKids)_<br>
 - _cd speckids_
 
 
@@ -50,8 +50,9 @@ SpecKids is a full-stack web application designed to support children with spect
 **3. Setup your environment**
 Create a .env file and add your PostgreSQL connection string and JWT secret:
 
-- _DATABASE_URL=your_postgres_url_
-- _JWT_SECRET=your_secret_key_
+- _PORT=8080_
+- _DATABASE_URL=postgres://dev:dev@localhost/changeMe_
+- _JWT_SECRET=changeMe_
 
 
 **4. Run the server**
@@ -70,6 +71,7 @@ Create a .env file and add your PostgreSQL connection string and JWT secret:
 
 **Michael John Pulusan**<br>
 Full Stack Developer<br>
+email: mjpulusan@yahoo.com<br>
 [LinkedIn](www.linkedin.com/in/michael-john-pulusan) | [GitHub](https://github.com/MJPulusan)
 
 
