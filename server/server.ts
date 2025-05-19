@@ -248,6 +248,7 @@ app.delete('/api/Schedules/:scheduleId', async (req, res, next) => {
 
 // ---------- TIME LIMITS ----------
 
+// This endpoint fetches the screen time limit for a user by ID, only if authenticated.
 app.get(
   '/api/TimeLimits/user/:userId',
   authMiddleware,
@@ -263,6 +264,7 @@ app.get(
   }
 );
 
+// This endpoint creates a new screen time limit for a user.
 app.post('/api/TimeLimits', authMiddleware, async (req, res, next) => {
   try {
     const { userId, hoursLimit, minutesLimit } = req.body;
@@ -281,9 +283,10 @@ app.post('/api/TimeLimits', authMiddleware, async (req, res, next) => {
   }
 });
 
+// This route updates an existing time limit entry in the TimeLimits table using the provided limitId and new values.
 app.put('/api/TimeLimits/:limitId', authMiddleware, async (req, res, next) => {
   try {
-    const limitId = Number(req.params.limitId);
+    const limitId = Number(req.params.limitId); // converts limitId into a number.
     const { userId, hoursLimit, minutesLimit } = req.body;
 
     if (

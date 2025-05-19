@@ -25,7 +25,7 @@ export function SignInForm() {
 
   return (
     <div className="sign-in-page">
-      <h2>Login</h2>
+      <h2 className="welcome">Login</h2>
       <div className="form-container">
         <div className="sign-in-header">
           <div className="button-to-right">

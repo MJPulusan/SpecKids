@@ -60,7 +60,7 @@ export function ParentRegForm() {
 
   return (
     <div className="parent-reg-page">
-      <h1>Register</h1>
+      <h1 className="welcome">Parent Registration</h1>
       <div className="form-container">
         <form onSubmit={handleSubmit} className="parentRegForm">
           {fields.map((field) => (

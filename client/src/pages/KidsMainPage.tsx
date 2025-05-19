@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { readUser, signIn, saveAuth } from '../lib/data';
-import TimesUpModal from '../components/TimesUpModal';
+import { readUser } from '../lib/data';
 import { useTimer } from '../components/TimerContext';
 import '../KidsMain.css';
 
@@ -9,16 +8,7 @@ export function KidsMain() {
   const navigate = useNavigate();
   const user = readUser();
 
-  const {
-    timeUp,
-    hours,
-    minutes,
-    seconds,
-    parentAuthError,
-    setParentAuthError,
-    setTimeUp,
-    reloadTimer,
-  } = useTimer();
+  const { hours, minutes, seconds, setTimeUp } = useTimer();
 
   // Redirect if user is not a kid
   useEffect(() => {
@@ -29,35 +19,12 @@ export function KidsMain() {
 
   if (!user || user.role !== 'kid') return null;
 
-  // Login for Parents in Pop-up Form
-  async function handleParentLogin(username: string, password: string) {
-    try {
-      const { user: parentUser, token } = await signIn(username, password);
-
-      if (parentUser.role !== 'parent') {
-        setParentAuthError('Oops! This section is for parents only.');
-        return;
-      }
-
-      saveAuth(parentUser, token);
-      setTimeUp(false);
-      reloadTimer(); // Restart timer after parent approves
-      navigate('/parents-main');
-    } catch {
-      setParentAuthError('Login failed. Please check credentials.');
-    }
-  }
-
   function handleExit() {
     setTimeUp(true); // trigger the modal instead of navigating
   }
 
   return (
     <div className="kids-main-container">
-      {timeUp && (
-        <TimesUpModal onSubmit={handleParentLogin} error={parentAuthError} />
-      )}
-
       <header className="kids-header">
         <img src="/images/logo.png" alt="SpecKids Logo" className="kids-logo" />
 
@@ -74,7 +41,9 @@ export function KidsMain() {
           </button>
         </div>
       </header>
-      <h1>Hello, {user.fullName || 'Kid'}!</h1>
+      <h1 className="welcome">
+        Hello {user.fullName || 'Kid'}, We're happy you're here!
+      </h1>
       <div className="activity-grid">
         <div
           className="activity-card"

@@ -25,17 +25,17 @@ export function TimerProvider({
   children,
   user,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode; // can be any valid JSX.
   user: UserEntry;
 }) {
   const [time, setTime] = useState(0);
-  const [hasLoaded, setHasLoaded] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false); // tracks my screen time data if fetch successfully.
   const [timeUp, setTimeUp] = useState(false);
   const [parentAuthError, setParentAuthError] = useState('');
 
   const fetchLimit = useCallback(async () => {
     if (!user?.userId) {
-      setTimeUp(true);
+      setTimeUp(true); // shows TimesUp!
       return;
     }
 
@@ -55,10 +55,12 @@ export function TimerProvider({
     }
   }, [user?.userId]);
 
+  // This hook calls fetchLimit() to load the time limit.
   useEffect(() => {
     fetchLimit();
   }, [fetchLimit]);
 
+  // This hook starts the timer once the child logged in.
   useEffect(() => {
     if (!hasLoaded || timeUp) return;
 
@@ -81,9 +83,9 @@ export function TimerProvider({
     fetchLimit();
   }, [fetchLimit]);
 
-  const hours = Math.floor(time / 3600);
+  const hours = Math.floor(time / 3600); // drops any decimal (3600sec in an hour)
   const minutes = Math.floor((time % 3600) / 60);
-  const seconds = time % 60;
+  const seconds = time % 60; // remaining sec. after getting full minutes. (65 % 60 = 5sec)
 
   return (
     <TimerContext.Provider

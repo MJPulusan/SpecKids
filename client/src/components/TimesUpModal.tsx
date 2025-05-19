@@ -10,7 +10,11 @@ type Props = {
 export default function TimesUpModal({ onSubmit, error }: Props) {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    // Creates a FormData object from the submitted form.
     const form = new FormData(e.currentTarget);
+
+    // Extracts the 'username' and 'password' field from the form data.
     const username = form.get('username') as string;
     const password = form.get('password') as string;
     onSubmit(username, password);
@@ -24,7 +28,7 @@ export default function TimesUpModal({ onSubmit, error }: Props) {
           alt="Time's Up"
           className="times-up-img"
         />
-        <h1>Thank you for using SpecKids!</h1>
+        <h1 className="welcome">Thank you for using SpecKids!</h1>
 
         <form onSubmit={handleSubmit} className="parent-login-form">
           <input name="username" type="text" placeholder="Username" required />

@@ -8,8 +8,16 @@ export function HomePage() {
   return (
     <div className="homepage-background">
       <div className="logo-header">
-        <img src="/images/logo.png" alt="SpecKids Logo" className="logo" />
+        <img
+          src="/images/logo-tagline.png"
+          alt="SpecKids Logo"
+          className="logo"
+        />
       </div>
+      <p>
+        A fun, safe, and supportive app designed for children with spectrum
+        conditions - where play, therapy, and screen time are all guided by you.
+      </p>
       <div className="login-container">
         <div className="button-group">
           <button

@@ -13,16 +13,16 @@ export function ScreenTimeForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError(undefined);
+    setError(undefined); // Clear any previous error
 
     try {
-      const kidId = localStorage.getItem('selectedChildId');
+      const kidId = localStorage.getItem('selectedChildId'); // Get selected kid ID from local storage
       if (!kidId) throw new Error('No kid selected');
 
       const existingLimit = await readTimeLimitByUserId(Number(kidId));
 
       await updateTimeLimit({
-        limitId: existingLimit?.limitId,
+        limitId: existingLimit?.limitId, // Reuse the existing limit ID
         userId: Number(kidId),
         hoursLimit: Number(hours),
         minutesLimit: Number(minutes),
@@ -50,7 +50,7 @@ export function ScreenTimeForm() {
               <input
                 type="number"
                 value={hours}
-                onChange={(e) => setHours(e.target.value)}
+                onChange={(e) => setHours(e.target.value)} // Update hours state as user types
                 min="0"
               />
             </div>
@@ -59,7 +59,7 @@ export function ScreenTimeForm() {
               <input
                 type="number"
                 value={minutes}
-                onChange={(e) => setMinutes(e.target.value)}
+                onChange={(e) => setMinutes(e.target.value)} // Update minutes state as user types
                 min="0"
               />
             </div>

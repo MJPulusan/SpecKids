@@ -37,7 +37,7 @@ export function ParentsMain() {
 
   return (
     <>
-      <h2>Welcome, {parentName}!</h2>
+      <h2 className="welcome">Welcome to SpecKids, {parentName}!</h2>
       <div className="form-container">
         <div className="header">
           <div className="button-to-right">
@@ -48,6 +48,10 @@ export function ParentsMain() {
         </div>
 
         <div className="card">
+          <label>
+            To get started, select a child profile to access and control their
+            features.
+          </label>
           <select
             value={selectedChild}
             onChange={(e) => {
@@ -84,6 +88,10 @@ export function ParentsMain() {
             disabled={!selectedChild}>
             Set Therapy schedule
           </button>
+          <p className="note">
+            Tip: Set your child’s screen time limit first to help manage their
+            activities smoothly.
+          </p>
         </div>
       </div>
     </>

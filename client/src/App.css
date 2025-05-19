@@ -63,7 +63,7 @@ body {
 }
 
 .form-container {
-  background: rgba(188, 186, 186, 0.7);
+  background: rgba(188, 186, 186, 0.8);
   text-align: center;
   display: absolute;
   justify-content: center;
@@ -80,16 +80,16 @@ body {
 }
 
 .login-container {
-  background: rgba(188, 186, 186, 0.7);
+  background: rgba(188, 186, 186, 0.8);
   text-align: center;
   display: absolute;
   justify-content: center;
   align-items: center;
-  padding-top: 1.5rem;
+  padding-top: 1rem;
   padding-bottom: 3rem;
   border-radius: 40px;
   position: absolute;
-  top: 60%;
+  top: 65%;
   left: 18%;
   width: 65%;
   box-shadow: 2px 2px 4px rgba(103, 103, 110, 0.5);
@@ -113,19 +113,18 @@ h2 {
 }
 
 p {
+  font-family: 'Poetsen One', sans-serif;
   padding-top: 2rem;
   color: rgb(226, 48, 48);
-  font-weight: bold;
-  font-size: large;
+  font-weight: light;
 }
 
 .logo {
   display: flex;
   margin: 0 auto;
   justify-content: center;
-  width: auto;
   height: auto;
-  max-width: 50%;
+  width: 45%;
   background-position: center;
   animation: bounceIn 2s ease infinite;
   animation-fill-mode: forwards;
@@ -152,7 +151,7 @@ p {
 @media (width <= 480px) {
   .logo-header {
     background-size: 60vw;
-    margin-top: 50%;
+    margin-top: 30%;
   }
 }
 
@@ -164,6 +163,11 @@ label {
   font-weight: bold;
   z-index: 1;
   position: relative;
+  color: rgb(7, 16, 146);
+}
+
+.card label {
+  font-size: 20px;
 }
 
 input[type='text'],
@@ -196,13 +200,13 @@ button {
   padding: 0.6em 1.2em;
   font-size: 24px;
   font-weight: 500;
-  font-family: inherit;
+  font-family: 'Poetsen One', sans-serif;
   background-color: #0bb4c0;
   color: white;
   cursor: pointer;
   transition: border-color 0.25s;
   transition: 0.5s;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -345,10 +349,6 @@ input::placeholder {
   padding-right: 35px;
 }
 
-.kids-logo {
-  width: 150px;
-}
-
 .kids-header {
   display: flex;
   position: relative;
@@ -393,10 +393,10 @@ input::placeholder {
 }
 
 .storybook-title {
-  font-size: 3rem;
+  font-size: 56px;
   color: #cacccf;
   text-shadow: 2px 2px 4px #000, 0 0 10px #ffe066, 0 0 20px #ffa94d;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: 'Poetsen One', sans-serif;
   animation: glow-pulse 2s infinite alternate;
   position: absolute;
   top: 10px;
@@ -434,7 +434,6 @@ input::placeholder {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 10px;
   height: 50px;
   flex-wrap: wrap;
 }
@@ -447,4 +446,22 @@ input::placeholder {
     margin-left: 5px;
     justify-items: center;
   }
+}
+
+.homepage-background p {
+  color: #66440c;
+  margin-top: 35px;
+  justify-content: center;
+}
+
+.welcome {
+  font-size: 36px;
+  font-family: 'Poetsen One', sans-serif;
+  font-weight: 400;
+  font-stretch: expanded;
+}
+
+.note {
+  color: #81540b;
+  font-size: 18px;
 }
