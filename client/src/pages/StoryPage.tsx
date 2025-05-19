@@ -36,7 +36,7 @@ export function StoryBook() {
     }
   }, []);
 
-  // Speak text using Microsoft Ana if available
+  // Speak text using Microsoft "Ana" if available
   function speak(text: string) {
     speechSynthesis.cancel(); // Stop any previous speech
     const anaVoice = voices.find(

@@ -11,6 +11,7 @@ function ModalPrompt() {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  // Login for Parents in Pop-up Form
   async function handleParentLogin(username: string, password: string) {
     setIsLoading(true);
     try {
@@ -35,6 +36,7 @@ function ModalPrompt() {
   if (!timeUp) return null;
 
   return (
+    // Displays my TimesUpModal w/ login
     <TimesUpModal onSubmit={handleParentLogin} error={parentAuthError}>
       {isLoading && <p>Authenticating...</p>}
     </TimesUpModal>

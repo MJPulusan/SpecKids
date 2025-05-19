@@ -65,7 +65,7 @@ export function TherapySchedForm() {
 
   return (
     <>
-      <h2>Therapy Schedules</h2>
+      <h2 className="welcome">Therapy Schedules</h2>
       <div className="therapy-form-container">
         <div className="therapy-layout">
           {/* LEFT: Therapy List */}

@@ -70,3 +70,10 @@ span {
   color: #9beaec;
   font-size: 36px;
 }
+
+.welcome {
+  font-size: 36px;
+  font-family: 'Poetsen One', sans-serif;
+  font-weight: 400;
+  font-stretch: expanded;
+}
