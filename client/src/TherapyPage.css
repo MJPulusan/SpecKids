@@ -15,6 +15,12 @@
   box-shadow: 2px 2px 4px rgba(103, 103, 110, 0.5);
 }
 
+@media (width <= 480px) {
+  .therapy-form-container {
+    height: 150%;
+  }
+}
+
 .therapy-layout {
   display: flex;
   gap: 1rem;
