@@ -14,10 +14,7 @@ export function HomePage() {
           className="logo"
         />
       </div>
-      <p>
-        A fun, safe, and supportive app designed for children with spectrum
-        conditions - where play, therapy, and screen time are all guided by you.
-      </p>
+
       <div className="login-container">
         <div className="button-group">
           <button
@@ -37,6 +34,11 @@ export function HomePage() {
             Sign In
           </button>
         </div>
+        <p>
+          A fun, safe, and supportive app designed for children with spectrum
+          conditions - where play, therapy, and screen time are all guided by
+          you.
+        </p>
       </div>
     </div>
   );

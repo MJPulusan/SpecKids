@@ -35,6 +35,13 @@ export function ParentsMain() {
     fetchChildren();
   }, []);
 
+  useEffect(() => {
+    if (children.length === 1) {
+      setSelectedChild(children[0].userId);
+      localStorage.setItem('selectedChildId', String(children[0].userId));
+    }
+  }, [children]);
+
   return (
     <>
       <h2 className="welcome">Welcome to SpecKids, {parentName}!</h2>

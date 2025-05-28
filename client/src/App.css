@@ -85,14 +85,20 @@ body {
   display: absolute;
   justify-content: center;
   align-items: center;
-  padding-top: 1rem;
-  padding-bottom: 3rem;
+  padding: 1.2rem;
   border-radius: 40px;
   position: absolute;
-  top: 65%;
-  left: 18%;
+  top: 60%;
+  left: 16%;
   width: 65%;
   box-shadow: 2px 2px 4px rgba(103, 103, 110, 0.5);
+}
+
+@media (width <= 480px) {
+  .login-container {
+    top: 35%;
+    left: 10%;
+  }
 }
 
 .therapy-page {
@@ -114,7 +120,6 @@ h2 {
 
 p {
   font-family: 'Poetsen One', sans-serif;
-  padding-top: 2rem;
   color: rgb(226, 48, 48);
   font-weight: light;
 }
@@ -124,7 +129,7 @@ p {
   margin: 0 auto;
   justify-content: center;
   height: auto;
-  width: 45%;
+  width: 42%;
   background-position: center;
   animation: bounceIn 2s ease infinite;
   animation-fill-mode: forwards;
@@ -152,6 +157,10 @@ p {
   .logo-header {
     background-size: 60vw;
     margin-top: 30%;
+  }
+
+  .logo-header img {
+    width: 75%;
   }
 }
 
@@ -448,9 +457,10 @@ input::placeholder {
   }
 }
 
+/* A fun, safe, and support... */
 .homepage-background p {
   color: #66440c;
-  margin-top: 35px;
+  margin-top: 50px;
   justify-content: center;
 }
 
@@ -464,4 +474,17 @@ input::placeholder {
 .note {
   color: #81540b;
   font-size: 18px;
+}
+
+.guest-link {
+  margin-top: 12px;
+  text-align: center;
+  color: #0f78e7;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 15px;
+}
+
+.guest-link:hover {
+  color: #0056b3;
 }

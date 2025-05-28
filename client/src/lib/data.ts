@@ -70,6 +70,16 @@ export async function signIn(
   return await res.json(); // returns { user, token }
 }
 
+export async function guestLogin(role: 'parent' | 'kid') {
+  const res = await fetch('/api/auth/guest-login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ role }),
+  });
+  if (!res.ok) throw new Error('Guest login failed');
+  return await res.json();
+}
+
 export async function registerParent(
   fullName: string,
   username: string,
