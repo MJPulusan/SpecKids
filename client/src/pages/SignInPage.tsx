@@ -23,6 +23,34 @@ export function SignInForm() {
     }
   }
 
+  // GUEST Login
+  async function handleGuestLogin(role: 'parent' | 'kid') {
+    try {
+      const credentials =
+        role === 'parent'
+          ? { username: 'guest_parent', password: 'Qwerty123$' }
+          : { username: 'guest_kid', password: 'abc123' };
+
+      const res = await fetch('/api/auth/sign-in', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials),
+      });
+
+      if (!res.ok) {
+        throw new Error('Guest login failed');
+      }
+
+      const { user, token } = await res.json();
+
+      saveAuth(user, token);
+      navigate(user.role === 'parent' ? '/parents-main' : '/kids/kids-main');
+    } catch (err) {
+      console.error('Guest login error:', err);
+      setError('Guest login unavailable.');
+    }
+  }
+
   return (
     <div className="sign-in-page">
       <h2 className="welcome">Login</h2>
@@ -37,7 +65,7 @@ export function SignInForm() {
 
         <form onSubmit={handleSubmit} className="signInForm">
           <div className="formGroup">
-            <label>UserName:</label>
+            <label>Username:</label>
             <input
               type="text"
               value={username}
@@ -57,6 +85,13 @@ export function SignInForm() {
           <button type="submit" className="signInButton">
             Sign In
           </button>
+          <h2 className="guest-link" onClick={() => handleGuestLogin('parent')}>
+            Sign In as Guest Parent
+          </h2>
+          <h2 className="guest-link" onClick={() => handleGuestLogin('kid')}>
+            Sign In as Guest Kid
+          </h2>
+
           {error && <p className="error-message">{error}</p>}
         </form>
         <AudioPlayer src="/sounds/SignInVoice.mp3" />

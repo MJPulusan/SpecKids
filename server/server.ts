@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars -- Remove when used */
 import 'dotenv/config';
-import express from 'express';
+import express, { application } from 'express';
 import pg from 'pg';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
@@ -105,9 +105,7 @@ app.post('/api/Users', authMiddleware, async (req, res, next) => {
       throw new ClientError(400, 'All fields required');
 
     // CHECKER: IF USERNAME ALREADY EXISTS.
-    const checkSql = `
-      SELECT 1 FROM "Users" WHERE "username" = $1
-    `;
+    const checkSql = `SELECT 1 FROM "Users" WHERE "username" = $1`;
     const checkResult = await db.query(checkSql, [username]);
 
     if (checkResult.rows.length > 0) {
