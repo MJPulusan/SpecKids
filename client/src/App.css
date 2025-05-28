@@ -79,6 +79,12 @@ body {
   box-shadow: 2px 2px 4px rgba(103, 103, 110, 0.5);
 }
 
+@media (width <= 480px) {
+  .form-container {
+    height: 100%;
+  }
+}
+
 .login-container {
   background: rgba(188, 186, 186, 0.8);
   text-align: center;
@@ -96,7 +102,7 @@ body {
 
 @media (width <= 480px) {
   .login-container {
-    top: 35%;
+    top: 45%;
     left: 10%;
   }
 }
@@ -379,6 +385,12 @@ input::placeholder {
   backdrop-filter: blur(5px);
 }
 
+@media (width <= 480px) {
+  .story-book-container {
+    top: 30%;
+  }
+}
+
 .story-background {
   background-image: url('/images/StorybookBg.png');
   background-size: cover;
@@ -391,6 +403,16 @@ input::placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (width <= 480px) {
+  .story-background {
+    background-size: cover;
+    background-repeat: repeat;
+    background-position: center;
+    height: 100vh;
+    width: 100vw;
+  }
 }
 
 .story-background::before {
