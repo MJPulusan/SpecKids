@@ -103,7 +103,7 @@ body {
 @media (width <= 480px) {
   .login-container {
     top: 45%;
-    left: 10%;
+    left: 12%;
   }
 }
 
@@ -162,7 +162,7 @@ p {
 @media (width <= 480px) {
   .logo-header {
     background-size: 60vw;
-    margin-top: 30%;
+    margin-top: 15%;
   }
 
   .logo-header img {
